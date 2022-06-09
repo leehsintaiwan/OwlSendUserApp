@@ -1,50 +1,47 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { db } from "../core/Config";
-import { deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { useState, useEffect } from "react";
 
 const PickupScreen = () => {
-  const [userDoc, setUserDoc] = useState(null);
-  const myDoc = doc(db, "MyCollection", "MyDocument");
+  const [orderStatus, setOrderStatus] = useState(null);
+  const userPhone = "0123456789";
+  const orderDoc = doc(db, "UserOrders", userPhone);
 
-  const Create = () => {
-    const docData = {
-      name: "John",
-      bio: "Coder",
-    };
-
-    setDoc(myDoc, docData).then(() => {
-      alert("Document created");
-    });
-  };
-
-  const Read = () => {
-    getDoc(myDoc).then((snapshot) => {
+  const ReadOrderStatus = () => {
+    getDoc(orderDoc).then((snapshot) => {
       if (snapshot.exists) {
-        setUserDoc(snapshot.data());
+        setOrderStatus(snapshot.data());
+        // console.log(snapshot.time.toString());
       } else {
-        alert("No doc found");
+        alert("No order found for this user");
       }
     });
   };
 
-  const Update = () => {
-    const newDocData = {
-      name: "Vincent",
-      bio: "Student",
-    };
-
-    updateDoc(myDoc, newDocData);
-  };
-
-  const Delete = () => {
-    deleteDoc(myDoc);
-  };
+  useEffect(() => {
+    ReadOrderStatus();
+  });
 
   return (
     <View>
-      <Text>Hello, {userDoc != null && userDoc.bio}</Text>
+      <View>
+        <Text>{orderStatus != null && orderStatus.status}</Text>
+      </View>
+      <View>
+        <Text>
+          Your parcel will be picked up by:
+          {orderStatus != null && orderStatus.driver.name}
+        </Text>
+      </View>
+      <View>
+        <Text>
+          Your driver will be arriving at:
+          {orderStatus != null && orderStatus.time.toDate().getHours()}:
+          {orderStatus != null && orderStatus.time.toDate().getMinutes()}
+        </Text>
+      </View>
     </View>
   );
 };
