@@ -1,11 +1,10 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
-import { db } from "./app/core/Config";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { db } from "../core/Config";
+import { deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
-import PickupScreen from "./app/screens/PickupScreen";
 
-export default function App() {
+const PickupScreen = () => {
   const [userDoc, setUserDoc] = useState(null);
   const myDoc = doc(db, "MyCollection", "MyDocument");
 
@@ -44,20 +43,12 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <PickupScreen />
-      {/* <Button title="Create New doc" onPress={Create}></Button>
-      <Button title="Read Doc" onPress={Read}></Button>
-      {userDoc != null && <Text>Bio: {userDoc.bio}</Text>} */}
+    <View>
+      <Text>Hello, {userDoc != null && userDoc.bio}</Text>
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default PickupScreen;
+
+const styles = StyleSheet.create({});
