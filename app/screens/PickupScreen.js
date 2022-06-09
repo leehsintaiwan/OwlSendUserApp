@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { db } from "../core/Config";
 import { doc, getDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
+
+import { db } from "../core/Config";
+import Colors from "../core/Colors";
+import { withTheme } from "react-native-elements";
 
 const PickupScreen = () => {
   const [orderStatus, setOrderStatus] = useState(null);
@@ -25,12 +28,14 @@ const PickupScreen = () => {
   });
 
   return (
-    <View>
+    <View style={styles.popupContainer}>
       <View>
-        <Text>{orderStatus != null && orderStatus.status}</Text>
+        <Text style={styles.title}>
+          {orderStatus != null && orderStatus.status}
+        </Text>
       </View>
-      <View>
-        <Text>
+      <View style={styles.driverContainer}>
+        <Text style={styles.driverText}>
           Your parcel will be picked up by:
           {orderStatus != null && orderStatus.driver.name}
         </Text>
@@ -48,4 +53,14 @@ const PickupScreen = () => {
 
 export default PickupScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  popupContainer: {},
+  title: {},
+
+  driverContainer: {
+    backgroundColor: Colors.primary,
+  },
+  driverText: {
+    color: "white",
+  },
+});
