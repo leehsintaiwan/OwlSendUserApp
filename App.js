@@ -1,8 +1,5 @@
-import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { useState } from "react";
-
 import { db } from "./app/core/Config";
 import HomeScreen from "./app/screens/HomeScreen";
 
