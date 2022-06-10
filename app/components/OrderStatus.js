@@ -31,7 +31,7 @@ const PickupScreen = () => {
           {orderStatus?.driver.name}
         </Text>
       </View>
-      <View>
+      <View style={styles.timeContainer}>
         <Text style={styles.timeText}>
           Your driver will be arriving at:
           <Text h3>
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   statusContainer: {
     height: "20%",
     justifyContent: "center",
+    padding: 15,
   },
 
   status: {
@@ -70,9 +71,14 @@ const styles = StyleSheet.create({
   driverText: {
     color: "white",
     fontWeight: "700",
+    padding: 15,
   },
   driverName: {
     textAlign: "center",
+  },
+  timeContainer: {
+    height: "40%",
+    paddingLeft: 15,
   },
   timeText: {
     fontWeight: "700",
