@@ -21,23 +21,29 @@ const PickupScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.statusContainer}>
-        <Text h3 style={styles.status}>
+        <Text h2 style={styles.allText}>
           {orderStatus?.status}
         </Text>
       </View>
       <View style={styles.driverContainer}>
-        <Text style={styles.driverText}>Your parcel will be picked up by:</Text>
-        <Text h3 style={[styles.driverText, styles.driverName]}>
+        <Text style={[styles.allText, styles.driverText]}>
+          Your parcel will be picked up by:
+        </Text>
+        <Text h2 style={[styles.allText, styles.driverText, styles.driverName]}>
           {orderStatus?.driver.name}
         </Text>
       </View>
       <View style={styles.timeContainer}>
-        <Text style={styles.timeText}>
-          Your driver will be arriving at:
-          <Text h3>
+        <View style={styles.timeRow}>
+          <Text style={[styles.allText]}>Your driver will be arriving at:</Text>
+          <Text h2 style={[styles.allText, styles.time]}>
             {orderStatus?.time.toDate().getHours()}:
             {orderStatus?.time.toDate().getMinutes()}
           </Text>
+        </View>
+        <Text h2 style={[styles.allText, styles.minutesLeft]}>
+          In {Math.floor((orderStatus?.time.toDate() - Date.now()) / 60000)}{" "}
+          mins
         </Text>
       </View>
     </View>
@@ -60,17 +66,18 @@ const styles = StyleSheet.create({
     padding: 15,
   },
 
-  status: {
+  allText: {
     fontWeight: "700",
+    fontSize: 18,
   },
 
   driverContainer: {
     backgroundColor: Colors.primary,
     height: "40%",
+    // padding: 15,
   },
   driverText: {
     color: "white",
-    fontWeight: "700",
     padding: 15,
   },
   driverName: {
@@ -79,8 +86,20 @@ const styles = StyleSheet.create({
   timeContainer: {
     height: "40%",
     paddingLeft: 15,
+    paddingTop: 5,
   },
-  timeText: {
-    fontWeight: "700",
+  timeRow: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    alignItems: "center",
+  },
+  time: {
+    flexGrow: 1,
+    textAlign: "center",
+  },
+  minutesLeft: {
+    textAlign: "center",
+    padding: 15,
   },
 });
