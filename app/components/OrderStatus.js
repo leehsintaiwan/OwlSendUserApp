@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
 
   driverContainer: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.secondary,
     height: "40%",
     // padding: 15,
   },
