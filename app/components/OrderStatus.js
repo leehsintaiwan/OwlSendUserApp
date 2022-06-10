@@ -19,21 +19,25 @@ const PickupScreen = () => {
   }, []);
 
   return (
-    <View style={styles.popupContainer}>
-      <View>
-        <Text h1>{orderStatus?.status}</Text>
+    <View style={styles.container}>
+      <View style={styles.statusContainer}>
+        <Text h3 style={styles.status}>
+          {orderStatus?.status}
+        </Text>
       </View>
       <View style={styles.driverContainer}>
-        <Text style={styles.driverText}>
-          Your parcel will be picked up by:
+        <Text style={styles.driverText}>Your parcel will be picked up by:</Text>
+        <Text h3 style={[styles.driverText, styles.driverName]}>
           {orderStatus?.driver.name}
         </Text>
       </View>
       <View>
-        <Text>
+        <Text style={styles.timeText}>
           Your driver will be arriving at:
-          {orderStatus?.time.toDate().getHours()}:
-          {orderStatus?.time.toDate().getMinutes()}
+          <Text h3>
+            {orderStatus?.time.toDate().getHours()}:
+            {orderStatus?.time.toDate().getMinutes()}
+          </Text>
         </Text>
       </View>
     </View>
@@ -43,12 +47,34 @@ const PickupScreen = () => {
 export default PickupScreen;
 
 const styles = StyleSheet.create({
-  popupContainer: {},
+  container: {
+    position: "absolute",
+    bottom: 0,
+    height: "45%",
+    width: "100%",
+  },
+
+  statusContainer: {
+    height: "20%",
+    justifyContent: "center",
+  },
+
+  status: {
+    fontWeight: "700",
+  },
 
   driverContainer: {
     backgroundColor: Colors.primary,
+    height: "40%",
   },
   driverText: {
     color: "white",
+    fontWeight: "700",
+  },
+  driverName: {
+    textAlign: "center",
+  },
+  timeText: {
+    fontWeight: "700",
   },
 });

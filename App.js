@@ -1,14 +1,15 @@
 import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { db } from "./app/core/Config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useState } from "react";
-import PickupScreen from "./app/screens/PickupScreen";
+
+import { db } from "./app/core/Config";
+import HomeScreen from "./app/screens/HomeScreen";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <PickupScreen />
+      <HomeScreen />
     </View>
   );
 }
