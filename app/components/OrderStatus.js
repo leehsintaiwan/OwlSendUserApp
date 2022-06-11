@@ -1,17 +1,17 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { Text } from "react-native-elements";
 
 import { db } from "../core/Config";
 import Colors from "../core/Colors";
 
 const NANOSECONDS_IN_MINUTE = 60000;
+const userPhone = "0123456789";
+const orderDoc = doc(db, "UserOrders", userPhone);
 
 const PickupScreen = () => {
-  const userPhone = "0123456789";
-  const orderDoc = doc(db, "UserOrders", userPhone);
   const [orderStatus, setOrderStatus] = useState(null);
   const [minutesLeft, setMinutesLeft] = useState(0);
 
