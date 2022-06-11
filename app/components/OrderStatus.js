@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
 
   driverText: {
     color: "white",
-    paddingLeft: 15,
-    paddingTop: 15,
+    marginLeft: 15,
+    marginTop: 15,
   },
 
   driverNameContainer: {
