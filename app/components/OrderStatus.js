@@ -1,27 +1,25 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { doc, onSnapshot } from "firebase/firestore";
 import { Text } from "react-native-elements";
 
-import { db } from "../core/Config";
 import Colors from "../core/Colors";
 
 const NANOSECONDS_IN_MINUTE = 60000;
-const userPhone = "0123456789";
-const orderDoc = doc(db, "UserOrders", userPhone);
 
-const PickupScreen = () => {
-  const [orderStatus, setOrderStatus] = useState(null);
-  const [minutesLeft, setMinutesLeft] = useState(0);
+const PickupScreen = ({ orderStatus }) => {
+  const [minutesLeft, setMinutesLeft] = useState(null);
 
   useEffect(() => {
-    return onSnapshot(orderDoc, (doc) => {
-      setOrderStatus(doc.data());
-    });
-  }, []);
+    setMinutesLeft(
+      Math.max(
+        0,
+        Math.ceil(
+          (orderStatus?.time.toDate() - Date.now()) / NANOSECONDS_IN_MINUTE
+        )
+      )
+    );
 
-  useEffect(() => {
     const interval = setInterval(() => {
       setMinutesLeft(
         Math.max(
@@ -33,7 +31,7 @@ const PickupScreen = () => {
       );
     }, 1000);
     return () => clearInterval(interval);
-  }, [orderStatus]);
+  }, []);
 
   return (
     <View style={styles.container}>
