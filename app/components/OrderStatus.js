@@ -1,8 +1,6 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-
 import Colors from "../core/Colors";
 
 const NANOSECONDS_IN_MINUTE = 60000;
@@ -79,9 +77,10 @@ const styles = StyleSheet.create({
   },
 
   container: {
+    backgroundColor: "white",
     position: "absolute",
     bottom: 0,
-    height: "100%",
+    height: "45%",
     width: "100%",
   },
 

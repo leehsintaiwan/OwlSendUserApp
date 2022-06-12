@@ -1,6 +1,6 @@
-import React from "react";
-import { StyleSheet, Button, Text, View, TextInput } from "react-native";
 import { Formik } from "formik";
+import React from "react";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 
 const RegisterScreen = () => {
   return (

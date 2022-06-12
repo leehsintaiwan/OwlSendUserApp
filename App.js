@@ -1,18 +1,12 @@
-import { Button, StyleSheet, Text, View } from "react-native";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "./app/core/Config";
-import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { Provider } from "react-redux";
-import { store } from "./store";
-
 import HomeScreen from "./app/screens/HomeScreen";
+import { store } from "./store";
 
 export default function App() {
   return (
     <Provider store={store}>
-      <View style={styles.container}>
-        <HomeScreen />
-      </View>
+      <HomeScreen />
     </Provider>
   );
 }

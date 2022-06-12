@@ -1,16 +1,10 @@
-import React from "react";
-import { useState, useEffect } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
-
-import { db } from "../core/Config";
-import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { useDispatch } from "react-redux";
-import tw from "twrnc";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import Map from "../components/Map";
-import { setDestination, setOrigin } from "../slices/navSlice";
-import OrderStatus from "../components/OrderStatus";
 import OrderRequest from "../components/OrderRequest";
+import OrderStatus from "../components/OrderStatus";
+import { db } from "../core/Config";
 
 const userPhone = "0123456789";
 const orderDoc = doc(db, "UserOrders", userPhone);
@@ -24,19 +18,14 @@ const HomeScreen = () => {
     });
   }, []);
 
-  // return (
-  // <View style={styles.container}>
-  //   {orderStatus ? <OrderStatus orderStatus={orderStatus} /> : <></>}
-
-  const dispatch = useDispatch();
   return (
-    <View style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Map />
-      </View>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <Map style={{ flex: 1 }} />
+      {orderStatus ? (
+        <OrderStatus orderStatus={orderStatus} />
+      ) : (
         <OrderRequest />
-      </View>
+      )}
     </View>
   );
 };

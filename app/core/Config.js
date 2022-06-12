@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { Firestore, getFirestore, updateDoc } from "firebase/firestore";
-import { useEffect } from "react";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQu9FrMsBabR-gQP1nbOUmI49YNOU9j2s",

@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { StyleSheet, View } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { useDispatch } from "react-redux";
-import { setDestination, setOrigin } from "../slices/navSlice";
 import Colors from "../core/Colors";
+import { setDestination, setOrigin } from "../slices/navSlice";
 
 const OrderRequest = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const OrderRequest = () => {
         }}
         fetchDetails={true}
         returnKeyType={"search"}
-        placeholder="Pickup address"
+        placeholder="Pickup Address"
         nearbyPlacesAPI="GooglePlacesSearch"
         debounce={400}
         query={{
@@ -41,7 +41,7 @@ const OrderRequest = () => {
         }}
         fetchDetails={true}
         returnKeyType={"search"}
-        placeholder="Dropoff address"
+        placeholder="Dropoff Address"
         nearbyPlacesAPI="GooglePlacesSearch"
         debounce={400}
         query={{
@@ -57,9 +57,10 @@ export default OrderRequest;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "white",
     position: "absolute",
     bottom: 0,
-    height: "80%",
+    height: "50%",
     width: "100%",
   },
 
@@ -75,5 +76,5 @@ const styles = StyleSheet.create({
     container: {
       flex: 0,
     },
-  }
+  },
 });

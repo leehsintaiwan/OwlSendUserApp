@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   origin: {
     location: {
-      lat: 51.5072178,
-      lng: -0.1275862,
+      lat: 51.498733, // This is the Geoloaction of Huxley!
+      lng: -0.179461,
     },
     description: "London, UK",
   },
