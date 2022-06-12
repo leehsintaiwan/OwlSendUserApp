@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
 
   driverContainer: {
     backgroundColor: Colors.primary,
-    height: "40%",
+    height: "38%",
   },
 
   driverText: {
@@ -99,12 +99,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    justifyContent: "center",
+    // justifyContent: "center",
   },
 
   driverName: {
     color: "white",
     textAlign: "center",
+    top: "40%",
   },
 
   minutesContainer: {
@@ -116,13 +117,13 @@ const styles = StyleSheet.create({
   },
 
   statusContainer: {
-    height: "20%",
+    height: "18%",
     justifyContent: "center",
-    padding: 15,
+    paddingHorizontal: 15,
   },
 
   timeContainer: {
-    height: "40%",
+    height: "44%",
   },
 
   timeRow: {

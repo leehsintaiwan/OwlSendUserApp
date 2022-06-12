@@ -15,7 +15,7 @@ const OrderRequest = () => {
           dispatch(
             setOrigin({
               location: details.geometry.location,
-              description: data.description,
+              description: details.name,
             })
           );
         }}
@@ -35,7 +35,7 @@ const OrderRequest = () => {
           dispatch(
             setDestination({
               location: details.geometry.location,
-              description: data.description,
+              description: details.name,
             })
           );
         }}

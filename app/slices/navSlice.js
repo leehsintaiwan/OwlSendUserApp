@@ -6,7 +6,7 @@ const initialState = {
       lat: 51.498733, // This is the Geoloaction of Huxley!
       lng: -0.179461,
     },
-    description: "London, UK",
+    description: "Huxley Building",
   },
   destination: null,
   travelTimeInformation: null,
