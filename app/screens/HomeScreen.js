@@ -20,7 +20,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Map style={{ flex: 1 }} />
+      <Map />
       {orderStatus ? (
         <OrderStatus orderStatus={orderStatus} />
       ) : (
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "center",
   },
 });
