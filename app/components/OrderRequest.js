@@ -1,11 +1,10 @@
-import {React, useState} from "react";
+import { React, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Colors from "../core/Colors";
-import { Button, Image, Input, Text, ButtonGroup } from "react-native-elements";
+import { Button, Input, Text, ButtonGroup } from "react-native-elements";
 
 const OrderRequest = ({ setOrigin, setDestination }) => {
-
   const [length, setLength] = useState("");
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
@@ -15,8 +14,6 @@ const OrderRequest = ({ setOrigin, setDestination }) => {
   const [lastName, setLastName] = useState("");
 
   const register = () => {};
-
-
 
   return (
     <View style={styles.container}>
@@ -60,73 +57,70 @@ const OrderRequest = ({ setOrigin, setDestination }) => {
           language: "en",
         }}
       />
-  <View style={styles.inputContainer}>
-        <View style={{ flexDirection: "row" }}>
-          <Input
-            containerStyle={{ width: "50%" }}
-            placeholder="First Name"
-            type="text"
-            value={firstName}
-            onChangeText={(text) => setFirstName(text)}
-          />
-          <Input
-            containerStyle={{ width: "50%" }}
-            placeholder="Last Name"
-            type="text"
-            value={lastName}
-            onChangeText={(text) => setLastName(text)}
-          />
-        </View>
+      <View style={{ flexDirection: "row" }}>
         <Input
-          placeholder="Phone number"
-          type="tel"
-          value={tel}
-          onChangeText={(text) => setTel(text)}
-          keyboardType={"phone-pad"}
-          onSubmitEditing={register}
+          containerStyle={{ width: "50%" }}
+          placeholder="First Name"
+          type="text"
+          value={firstName}
+          onChangeText={(text) => setFirstName(text)}
+        />
+        <Input
+          containerStyle={{ width: "50%" }}
+          placeholder="Last Name"
+          type="text"
+          value={lastName}
+          onChangeText={(text) => setLastName(text)}
         />
       </View>
+      <Input
+        placeholder="Phone number"
+        type="tel"
+        value={tel}
+        onChangeText={(text) => setTel(text)}
+        keyboardType={"phone-pad"}
+        onSubmitEditing={register}
+      />
       <Text style={{ color: "grey", marginLeft: 10 }}>
-          How large is your parcel?
-        </Text>
-        <View style={{ width: "25%", flexDirection: "row" }}>
-          <Input
-            placeholder="Length (cm)"
-            keyboardType="numeric"
-            value={length}
-            onChangeText={(text) => setLength(text)}
-            style={styles.sizeField}
-          />
-          <Input
-            placeholder="Width (cm)"
-            keyboardType="numeric"
-            value={width}
-            onChangeText={(text) => setWidth(text)}
-            style={styles.sizeField}
-          />
-          <Input
-            placeholder="Height (cm)"
-            keyboardType="numeric"
-            value={height}
-            onChangeText={(text) => setHeight(text)}
-            style={styles.sizeField}
-          />
-          <Input
-            placeholder="Weight (kg)"
-            keyboardType="numeric"
-            value={weight}
-            onChangeText={(text) => setWeight(text)}
-            style={styles.sizeField}
-          />
-        </View>
-        <Button
+        How large is your parcel?
+      </Text>
+      <View style={{ width: "100%", flexDirection: "column" }}>
+        <Input
+          placeholder="Length (cm)"
+          keyboardType="numeric"
+          value={length}
+          onChangeText={(text) => setLength(text)}
+          style={styles.sizeField}
+        />
+        <Input
+          placeholder="Width (cm)"
+          keyboardType="numeric"
+          value={width}
+          onChangeText={(text) => setWidth(text)}
+          style={styles.sizeField}
+        />
+        <Input
+          placeholder="Height (cm)"
+          keyboardType="numeric"
+          value={height}
+          onChangeText={(text) => setHeight(text)}
+          style={styles.sizeField}
+        />
+        <Input
+          placeholder="Weight (kg)"
+          keyboardType="numeric"
+          value={weight}
+          onChangeText={(text) => setWeight(text)}
+          style={styles.sizeField}
+        />
+      </View>
+      <Button
         title="Send Parcel"
         raised
         onPress={register}
         containerStyle={styles.button}
         buttonStyle={styles.buttonStyle}
       />
-
     </View>
   );
 };
@@ -135,18 +129,21 @@ export default OrderRequest;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    padding: 10,
     backgroundColor: "white",
     position: "absolute",
     bottom: 0,
-    height: "50%",
+    height: "80%",
     width: "100%",
   },
 
   inputStyles: {
     textInputContainer: {
-      backgroundColor: Colors.primary,
+      //backgroundColor: Colors.primary,
     },
     textInput: {
+      width: "100%",
       height: 38,
       color: "#5d5d5d",
       fontSize: 16,
