@@ -1,66 +1,84 @@
-import { Formik } from "formik";
-import React from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View, Platform } from "react-native";
+import { Button, Image, Input, Text } from "react-native-elements";
+import React, { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Colors from "../core/Colors";
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ navigation }) => {
+  const [tel, setTel] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const continueRegistration = () => {
+    console.log("login");
+  };
+
   return (
-    <View style={styles.registerContainer}>
-      <Text>Register</Text>
-      <Formik
-        initialValues={{ firstName: "", lastName: "", phoneNumber: "" }}
-        onSubmit={(values) => console.log(values)}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
-          <>
-            <TextInput
-              name="firstName"
-              placeholder="First"
-              style={styles.textInput}
-              onChangeText={handleChange("firstName")}
-              onBlur={handleBlur("firstName")}
-              value={values.firstName}
-              keyboardType="default"
-            />
-            <TextInput
-              name="lastName"
-              placeholder="Last"
-              style={styles.textInput}
-              onChangeText={handleChange("lastName")}
-              onBlur={handleBlur("lastName")}
-              value={values.firstName}
-              keyboardType="default"
-            />
-            <TextInput
-              name="phoneNumber"
-              placeholder="Phone Number"
-              style={styles.textInput}
-              onChangeText={handleChange("phoneNumber")}
-              onBlur={handleBlur("phoneNumber")}
-              value={values.firstName}
-              keyboardType="numeric"
-            />
-            <Button onPress={handleSubmit} title="Submit" />
-          </>
-        )}
-      </Formik>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "android" ? "padding" : "height"}
+      enabled
+      style={styles.container}
+    >
+      <Image
+        source={require("../assets/owl-send-logo-transparent-bg.png")}
+        style={{ width: 419, height: 190 }}
+      />
+      <Text h4 style={{ marginTop: 20, marginBottom: 10, fontWeight: "700" }}>
+        Create a user account
+      </Text>
+      <View style={styles.inputContainer}>
+        <View style={{ width: 200, flexDirection: "row" }}>
+          <Input
+            placeholder="First Name"
+            type="text"
+            value={firstName}
+            onChangeText={(text) => setFirstName(text)}
+          />
+          <Input
+            placeholder="Last Name"
+            type="text"
+            value={lastName}
+            onChangeText={(text) => setLastName(text)}
+          />
+        </View>
+        <Input
+          placeholder="Phone Number"
+          type="tel"
+          value={tel}
+          onChangeText={(text) => setTel(text)}
+          keyboardType={"phone-pad"}
+          onSubmitEditing={continueRegistration}
+        />
+      </View>
+      <Button
+        buttonStyle={styles.buttonStyle}
+        title="Continue"
+        containerStyle={styles.button}
+        //onPress={() => navigation.navigate("ContinueRegister")}
+      />
+    </KeyboardAvoidingView>
   );
 };
 
+export default RegisterScreen;
+
 const styles = StyleSheet.create({
-  registerContainer: {
-    width: "80%",
+  container: {
+    flex: 1,
     alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
   },
-  textInput: {
-    height: 40,
-    width: "100%",
-    margin: 10,
-    backgroundColor: "white",
-    borderColor: "gray",
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 10,
+  inputContainer: {
+    width: 400,
+  },
+  button: {
+    width: 200,
+    marginTop: 10,
+  },
+  buttonStyle: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
   },
 });
-
-export default RegisterScreen;
