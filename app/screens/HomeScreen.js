@@ -6,7 +6,7 @@ import OrderRequest from "../components/OrderRequest";
 import OrderStatus from "../components/OrderStatus";
 import { db } from "../core/Config";
 
-const userPhone = "012345678";
+const userPhone = "0123456789";
 const orderDoc = doc(db, "UserOrders", userPhone);
 
 const HomeScreen = () => {
