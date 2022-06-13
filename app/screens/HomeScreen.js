@@ -11,13 +11,7 @@ const orderDoc = doc(db, "UserOrders", userPhone);
 
 const HomeScreen = () => {
   const [orderStatus, setOrderStatus] = useState(null);
-  const [origin, setOrigin] = useState({
-    location: {
-      lat: 51.498733, // This is the Geoloaction of Huxley!
-      lng: -0.179461,
-    },
-    description: "Huxley Building",
-  });
+  const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
 
   useEffect(() => {

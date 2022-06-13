@@ -5,6 +5,12 @@ import MapViewDirections from "react-native-maps-directions";
 
 const Map = ({ origin, destination }) => {
   const mapRef = useRef(null);
+  const initialMapCenter = {
+    location: {
+      lat: 51.498733, // This is the Geoloaction of Huxley!
+      lng: -0.179461,
+    },
+  };
 
   useEffect(() => {
     if (!origin || !destination) return;
@@ -19,13 +25,13 @@ const Map = ({ origin, destination }) => {
       style={{ flex: 1 }}
       mapType="mutedStandard"
       region={{
-        latitude: origin.location.lat,
-        longitude: origin.location.lng,
-        latitudeDelta: 0.04,
-        longitudeDelta: 0.04,
+        latitude: initialMapCenter.location.lat,
+        longitude: initialMapCenter.location.lng,
+        latitudeDelta: 0.06,
+        longitudeDelta: 0.06,
       }}
     >
-      {origin?.location && (
+      {origin && (
         <Marker
           coordinate={{
             latitude: origin.location.lat,
@@ -41,7 +47,7 @@ const Map = ({ origin, destination }) => {
           />
         </Marker>
       )}
-      {destination?.location && (
+      {destination && (
         <Marker
           coordinate={{
             latitude: destination.location.lat,
