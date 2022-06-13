@@ -66,6 +66,7 @@ const LoginScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
         title="Continue"
         containerStyle={styles.button}
         onPress={register}
+        titleStyle={styles.buttonTitle}
       />
     </KeyboardAvoidingView>
   );
@@ -90,5 +91,8 @@ const styles = StyleSheet.create({
   buttonStyle: {
     backgroundColor: Colors.primary,
     borderColor: Colors.primary,
+  },
+  buttonTitle: {
+    fontWeight: "500",
   },
 });

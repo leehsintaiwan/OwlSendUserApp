@@ -24,7 +24,11 @@ const HomeScreen = ({ userProfile, setEditProfile }) => {
       {orderStatus ? (
         <OrderStatus orderStatus={orderStatus} />
       ) : (
-        <OrderRequest setOrigin={setOrigin} setDestination={setDestination} />
+        <OrderRequest
+          setOrigin={setOrigin}
+          setDestination={setDestination}
+          userProfile={userProfile}
+        />
       )}
     </View>
   );
