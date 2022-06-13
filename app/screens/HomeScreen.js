@@ -6,11 +6,19 @@ import OrderRequest from "../components/OrderRequest";
 import OrderStatus from "../components/OrderStatus";
 import { db } from "../core/Config";
 
-const userPhone = "0123456789";
+const userPhone = "012345678";
 const orderDoc = doc(db, "UserOrders", userPhone);
 
 const HomeScreen = () => {
   const [orderStatus, setOrderStatus] = useState(null);
+  const [origin, setOrigin] = useState({
+    location: {
+      lat: 51.498733, // This is the Geoloaction of Huxley!
+      lng: -0.179461,
+    },
+    description: "Huxley Building",
+  });
+  const [destination, setDestination] = useState(null);
 
   useEffect(() => {
     return onSnapshot(orderDoc, (doc) => {
@@ -20,11 +28,11 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Map />
+      <Map origin={origin} destination={destination} />
       {orderStatus ? (
         <OrderStatus orderStatus={orderStatus} />
       ) : (
-        <OrderRequest />
+        <OrderRequest setOrigin={setOrigin} setDestination={setDestination} />
       )}
     </View>
   );

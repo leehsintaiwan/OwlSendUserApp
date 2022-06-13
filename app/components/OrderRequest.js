@@ -1,23 +1,18 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { useDispatch } from "react-redux";
 import Colors from "../core/Colors";
-import { setDestination, setOrigin } from "../slices/navSlice";
 
-const OrderRequest = () => {
-  const dispatch = useDispatch();
+const OrderRequest = ({ setOrigin, setDestination }) => {
   return (
     <View style={styles.container}>
       <GooglePlacesAutocomplete
         styles={styles.inputStyles}
         onPress={(data, details = null) => {
-          dispatch(
-            setOrigin({
-              location: details.geometry.location,
-              description: details.name,
-            })
-          );
+          setOrigin({
+            location: details.geometry.location,
+            description: details.name,
+          });
         }}
         fetchDetails={true}
         returnKeyType={"search"}
@@ -32,12 +27,10 @@ const OrderRequest = () => {
       <GooglePlacesAutocomplete
         styles={styles.inputStyles}
         onPress={(data, details = null) => {
-          dispatch(
-            setDestination({
-              location: details.geometry.location,
-              description: details.name,
-            })
-          );
+          setDestination({
+            location: details.geometry.location,
+            description: details.name,
+          });
         }}
         fetchDetails={true}
         returnKeyType={"search"}

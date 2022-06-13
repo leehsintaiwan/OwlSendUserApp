@@ -1,14 +1,8 @@
-import { StyleSheet, View } from "react-native";
-import { Provider } from "react-redux";
+import { StyleSheet } from "react-native";
 import HomeScreen from "./app/screens/HomeScreen";
-import { store } from "./store";
 
 export default function App() {
-  return (
-    <Provider store={store}>
-      <HomeScreen />
-    </Provider>
-  );
+  return <HomeScreen />;
 }
 
 const styles = StyleSheet.create({
