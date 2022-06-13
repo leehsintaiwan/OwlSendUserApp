@@ -1,7 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
-import { Button, Image, Input, Text } from "react-native-elements";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+  Image,
+} from "react-native";
+import { Button, Input, Text } from "react-native-elements";
 import Colors from "../core/Colors";
 
 const LoginScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
@@ -31,7 +37,7 @@ const LoginScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
     >
       <Image
         source={require("../assets/owl-send-logo-transparent-bg.png")}
-        style={{ width: 380, height: 180 }}
+        style={{ width: "100%", height: "20%" }}
       />
       <Text h4 style={{ marginTop: 20, marginBottom: 10, fontWeight: "700" }}>
         Create an User Account
