@@ -8,7 +8,7 @@ const Map = ({ origin, destination }) => {
   const initialMapCenter = {
     location: {
       lat: 51.498733, // This is the Geoloaction of Huxley!
-      lng: -0.179461,
+      lng: -0.179461, // Change to user's current location later on.
     },
   };
 
@@ -21,6 +21,10 @@ const Map = ({ origin, destination }) => {
 
   return (
     <MapView
+      provider={MapView.PROVIDER_GOOGLE}
+      // showsUserLocation={true}
+      // followsUserLocation={true}
+      // showsMyLocationButton={true}
       ref={mapRef}
       style={{ flex: 1 }}
       mapType="mutedStandard"
@@ -38,7 +42,7 @@ const Map = ({ origin, destination }) => {
             longitude: origin.location.lng,
           }}
           title="Pickup"
-          description={origin.description}
+          description={origin.shortAddress}
           identifier="origin"
         >
           <Image
@@ -54,7 +58,7 @@ const Map = ({ origin, destination }) => {
             longitude: destination.location.lng,
           }}
           title="Dropoff"
-          description={destination.description}
+          description={destination.shortAddress}
           identifier="destination"
         >
           <Image
@@ -65,8 +69,8 @@ const Map = ({ origin, destination }) => {
       )}
       {origin && destination && (
         <MapViewDirections
-          origin={origin.description}
-          destination={destination.description}
+          origin={origin.shortAddress}
+          destination={destination.shortAddress}
           apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
           strokeWidth={2}
           strokeColor="red"

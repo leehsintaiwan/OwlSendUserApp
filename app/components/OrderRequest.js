@@ -11,7 +11,9 @@ const OrderRequest = ({ setOrigin, setDestination }) => {
         onPress={(data, details = null) => {
           setOrigin({
             location: details.geometry.location,
-            description: details.name,
+            shortAddress: details.name,
+            address: details.formatted_address,
+            postcode: details.address_components.slice(-1)[0].long_name,
           });
         }}
         fetchDetails={true}
@@ -29,7 +31,9 @@ const OrderRequest = ({ setOrigin, setDestination }) => {
         onPress={(data, details = null) => {
           setDestination({
             location: details.geometry.location,
-            description: details.name,
+            shortAddress: details.name,
+            address: details.formatted_address,
+            postcode: details.address_components.slice(-1)[0].long_name,
           });
         }}
         fetchDetails={true}

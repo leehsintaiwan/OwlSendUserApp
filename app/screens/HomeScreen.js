@@ -1,12 +1,13 @@
 import { doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import FindingDrivers from "../components/FindingDrivers";
 import Map from "../components/Map";
 import OrderRequest from "../components/OrderRequest";
 import OrderStatus from "../components/OrderStatus";
 import { db } from "../core/Config";
 
-const userPhone = "012345678";
+const userPhone = "0123456789";
 const orderDoc = doc(db, "UserOrders", userPhone);
 
 const HomeScreen = () => {
@@ -24,8 +25,9 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <Map origin={origin} destination={destination} />
       {orderStatus ? (
-        <OrderStatus orderStatus={orderStatus} />
+        <FindingDrivers />
       ) : (
+        // <OrderStatus orderStatus={orderStatus} />
         <OrderRequest setOrigin={setOrigin} setDestination={setDestination} />
       )}
     </View>
