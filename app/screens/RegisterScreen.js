@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { Button, Image, Input, Text } from "react-native-elements";
 import Colors from "../core/Colors";
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, setUserProfile }) => {
   const [tel, setTel] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-  const register = () => {
-    console.log("login");
+  const register = async () => {
+    const profile = { name: firstName + " " + lastName, phone: tel };
+
+    // Save user profile into persistent storage on device.
+    try {
+      await AsyncStorage.setItem("profile", JSON.stringify({ profile }));
+    } catch (e) {
+      console.log(err);
+    }
+
+    setUserProfile(profile);
   };
 
   return (
@@ -20,7 +30,7 @@ const LoginScreen = ({ navigation }) => {
     >
       <Image
         source={require("../assets/owl-send-logo-transparent-bg.png")}
-        style={{ width: "100%", height: "40%" }}
+        style={{ width: 380, height: 180 }}
       />
       <Text h4 style={{ marginTop: 20, marginBottom: 10, fontWeight: "700" }}>
         Create an User Account
@@ -43,19 +53,18 @@ const LoginScreen = ({ navigation }) => {
           />
         </View>
         <Input
-          placeholder="Phone number"
+          placeholder="Phone Number"
           type="tel"
           value={tel}
           onChangeText={(text) => setTel(text)}
           keyboardType={"phone-pad"}
-          onSubmitEditing={register}
         />
       </View>
       <Button
         buttonStyle={styles.buttonStyle}
         title="Continue"
         containerStyle={styles.button}
-        onPress={() => navigation.navigate("Home")}
+        onPress={register}
       />
     </KeyboardAvoidingView>
   );
