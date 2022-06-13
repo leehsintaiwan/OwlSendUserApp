@@ -4,13 +4,13 @@ import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { Button, Image, Input, Text } from "react-native-elements";
 import Colors from "../core/Colors";
 
-const LoginScreen = ({ navigation, setUserProfile }) => {
-  const [tel, setTel] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+const LoginScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
+  const [tel, setTel] = useState(userProfile?.phone);
+  const [firstName, setFirstName] = useState(userProfile?.firstName);
+  const [lastName, setLastName] = useState(userProfile?.lastName);
 
   const register = async () => {
-    const profile = { name: firstName + " " + lastName, phone: tel };
+    const profile = { firstName: firstName, lastName: lastName, phone: tel };
 
     // Save user profile into persistent storage on device.
     try {
@@ -20,6 +20,7 @@ const LoginScreen = ({ navigation, setUserProfile }) => {
     }
 
     setUserProfile(profile);
+    setEditProfile(false);
   };
 
   return (

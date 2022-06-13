@@ -6,7 +6,7 @@ import OrderRequest from "../components/OrderRequest";
 import OrderStatus from "../components/OrderStatus";
 import { db } from "../core/Config";
 
-const HomeScreen = ({ userProfile, setUserProfile }) => {
+const HomeScreen = ({ userProfile, setEditProfile }) => {
   const orderDoc = doc(db, "UserOrders", userProfile.phone);
   const [orderStatus, setOrderStatus] = useState(null);
   const [origin, setOrigin] = useState(null);

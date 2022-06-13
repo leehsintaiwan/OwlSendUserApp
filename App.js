@@ -1,15 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import HomeScreen from "./app/screens/HomeScreen";
 import RegisterScreen from "./app/screens/RegisterScreen";
-import SplashScreen from "./app/screens/SplashScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
-  const [isLoading, setIsLoading] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
+  const [editProfile, setEditProfile] = useState(false);
 
   const getUserProfile = async () => {
     // Get user profile from device storage.
@@ -19,7 +18,6 @@ export default function App() {
       if (user) {
         setUserProfile(user.profile);
       }
-      setIsLoading(false);
     } catch (e) {
       console.log(e);
     }
@@ -27,26 +25,28 @@ export default function App() {
 
   const Home = () => {
     return (
-      <HomeScreen userProfile={userProfile} setUserProfile={setUserProfile} />
+      <HomeScreen userProfile={userProfile} setEditProfile={setEditProfile} />
     );
   };
 
   const Register = () => {
-    return <RegisterScreen setUserProfile={setUserProfile} />;
+    return (
+      <RegisterScreen
+        userProfile={userProfile}
+        setUserProfile={setUserProfile}
+        setEditProfile={setEditProfile}
+      />
+    );
   };
 
   useEffect(() => {
     getUserProfile();
   }, []);
 
-  if (isLoading) {
-    return <SplashScreen />;
-  }
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {userProfile ? (
+        {userProfile && !editProfile ? (
           <Stack.Screen
             name="Home"
             component={Home}
