@@ -4,11 +4,11 @@ import { Text, Button } from "react-native-elements";
 import Colors from "../core/Colors";
 
 const PickupScreen = ({ orderStatus }) => {
-  const [minutesLeft, setMinutesLeft] = useState(null);
+  const [minutesLeft, setMinutesLeft] = useState(
+    getMinutesLeft(orderStatus?.time.toDate())
+  );
 
   useEffect(() => {
-    setMinutesLeft(getMinutesLeft(orderStatus?.time.toDate()));
-
     const interval = setInterval(() => {
       setMinutesLeft(getMinutesLeft(orderStatus?.time.toDate()));
     }, 1000);
@@ -60,12 +60,9 @@ const PickupScreen = ({ orderStatus }) => {
             <Button
               title="Close"
               raised={true}
-              buttonStyle={{ backgroundColor: Colors.dark, borderRadius: 6 }}
-              containerStyle={{
-                marginTop: 12,
-                width: "60%",
-                borderRadius: 6,
-              }}
+              buttonStyle={styles.buttonStyle}
+              containerStyle={styles.buttonContainerStyle}
+              titleStyle={styles.buttonTitleStyle}
             />
           )}
         </View>
@@ -131,6 +128,19 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 18,
   },
+
+  buttonStyle: {
+    backgroundColor: Colors.dark,
+    borderRadius: 6,
+  },
+
+  buttonContainerStyle: {
+    marginTop: 12,
+    width: "60%",
+    borderRadius: 6,
+  },
+
+  buttonTitleStyle: { fontWeight: "500" },
 
   container: {
     backgroundColor: "white",
