@@ -4,7 +4,7 @@ import { Button, Input, Text } from "react-native-elements";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Colors from "../core/Colors";
 
-const OrderRequest = ({ setOrigin, setDestination, userProfile }) => {
+const OrderRequest = ({ setOrig, setDest, userProfile }) => {
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
   const [length, setLength] = useState("");
@@ -25,7 +25,7 @@ const OrderRequest = ({ setOrigin, setDestination, userProfile }) => {
           placeholderTextColor: "#5d5d5d",
         }}
         onPress={(data, details = null) => {
-          setOrigin({
+          setOrig({
             location: details.geometry.location,
             shortAddress: details.name,
             address: details.formatted_address,
@@ -48,7 +48,7 @@ const OrderRequest = ({ setOrigin, setDestination, userProfile }) => {
           placeholderTextColor: "#5d5d5d",
         }}
         onPress={(data, details = null) => {
-          setDestination({
+          setDest({
             location: details.geometry.location,
             shortAddress: details.name,
             address: details.formatted_address,

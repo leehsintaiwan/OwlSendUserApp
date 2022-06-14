@@ -9,8 +9,8 @@ import { db } from "../core/Config";
 const HomeScreen = ({ userProfile, setEditProfile }) => {
   const orderDoc = doc(db, "UserOrders", userProfile.phone);
   const [orderStatus, setOrderStatus] = useState(null);
-  const [origin, setOrigin] = useState(null);
-  const [destination, setDestination] = useState(null);
+  const [orig, setOrig] = useState(null);
+  const [dest, setDest] = useState(null);
 
   useEffect(() => {
     console.log(userProfile);
@@ -22,13 +22,13 @@ const HomeScreen = ({ userProfile, setEditProfile }) => {
 
   return (
     <View style={styles.container}>
-      <Map origin={origin} destination={destination} />
+      <Map orig={orig} dest={dest} />
       {orderStatus ? (
         <OrderStatus orderStatus={orderStatus} />
       ) : (
         <OrderRequest
-          setOrigin={setOrigin}
-          setDestination={setDestination}
+          setOrig={setOrig}
+          setDest={setDest}
           userProfile={userProfile}
         />
       )}

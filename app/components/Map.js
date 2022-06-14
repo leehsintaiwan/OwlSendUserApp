@@ -2,8 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { Image } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
+import Colors from "../core/Colors";
 
-const Map = ({ origin, destination }) => {
+const Map = ({ orig, dest }) => {
   const mapRef = useRef(null);
   const initialMapCenter = {
     location: {
@@ -13,11 +14,11 @@ const Map = ({ origin, destination }) => {
   };
 
   useEffect(() => {
-    if (!origin || !destination) return;
-    mapRef.current.fitToSuppliedMarkers(["origin", "destination"], {
-      edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
+    if (!orig || !dest) return;
+    mapRef.current.fitToSuppliedMarkers(["orig", "dest"], {
+      edgePadding: { top: 100, right: 100, bottom: 300, left: 100 },
     });
-  }, [origin, destination]);
+  }, [orig, dest]);
 
   return (
     <MapView
@@ -35,15 +36,15 @@ const Map = ({ origin, destination }) => {
         longitudeDelta: 0.06,
       }}
     >
-      {origin && (
+      {orig && (
         <Marker
           coordinate={{
-            latitude: origin.location.lat,
-            longitude: origin.location.lng,
+            latitude: orig.location.lat,
+            longitude: orig.location.lng,
           }}
           title="Pickup"
-          description={origin.shortAddress}
-          identifier="origin"
+          description={orig.shortAddress}
+          identifier="orig"
         >
           <Image
             source={require("../assets/location.png")}
@@ -51,15 +52,15 @@ const Map = ({ origin, destination }) => {
           />
         </Marker>
       )}
-      {destination && (
+      {dest && (
         <Marker
           coordinate={{
-            latitude: destination.location.lat,
-            longitude: destination.location.lng,
+            latitude: dest.location.lat,
+            longitude: dest.location.lng,
           }}
           title="Dropoff"
-          description={destination.shortAddress}
-          identifier="destination"
+          description={dest.shortAddress}
+          identifier="dest"
         >
           <Image
             source={require("../assets/destination.png")}
@@ -67,13 +68,19 @@ const Map = ({ origin, destination }) => {
           />
         </Marker>
       )}
-      {origin && destination && (
+      {orig && dest && (
         <MapViewDirections
-          origin={origin.shortAddress}
-          destination={destination.shortAddress}
+          origin={{
+            latitude: orig.location.lat,
+            longitude: orig.location.lng,
+          }}
+          destination={{
+            latitude: dest.location.lat,
+            longitude: dest.location.lng,
+          }}
           apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
-          strokeWidth={2}
-          strokeColor="red"
+          strokeWidth={3}
+          strokeColor={Colors.primary}
         />
       )}
     </MapView>
