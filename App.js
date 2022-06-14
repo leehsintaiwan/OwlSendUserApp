@@ -9,7 +9,6 @@ import { StatusBar } from "expo-status-bar";
 export default function App() {
   const Stack = createNativeStackNavigator();
   const [userProfile, setUserProfile] = useState(null);
-  const [editProfile, setEditProfile] = useState(false);
 
   const getUserProfile = async () => {
     // Get user profile from device storage.
@@ -30,7 +29,6 @@ export default function App() {
         navigation={navigation}
         route={route}
         userProfile={userProfile}
-        setEditProfile={setEditProfile}
       />
     );
   };
@@ -42,7 +40,6 @@ export default function App() {
         route={route}
         userProfile={userProfile}
         setUserProfile={setUserProfile}
-        setEditProfile={setEditProfile}
       />
     );
   };
@@ -54,20 +51,17 @@ export default function App() {
   return (
     <NavigationContainer>
       <StatusBar style="dark" />
-      <Stack.Navigator>
-        {userProfile && !editProfile ? (
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-        ) : (
-          <Stack.Screen
-            name="Register"
-            component={Register}
-            options={{ headerShown: false }}
-          />
-        )}
+      <Stack.Navigator initialRouteName="Register">
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -6,7 +6,7 @@ import OrderRequest from "../components/OrderRequest";
 import OrderStatus from "../components/OrderStatus";
 import { db } from "../core/Config";
 
-const HomeScreen = ({ userProfile, setEditProfile }) => {
+const HomeScreen = ({ navigation, userProfile }) => {
   const orderDoc = doc(db, "UserOrders", userProfile.phone);
   const [orderStatus, setOrderStatus] = useState(null);
   const [orig, setOrig] = useState(null);
@@ -30,6 +30,7 @@ const HomeScreen = ({ userProfile, setEditProfile }) => {
           setOrig={setOrig}
           setDest={setDest}
           userProfile={userProfile}
+          navigation={navigation}
         />
       )}
     </View>

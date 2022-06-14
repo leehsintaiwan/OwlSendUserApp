@@ -10,10 +10,16 @@ import {
 import { Button, Input, Text } from "react-native-elements";
 import Colors from "../core/Colors";
 
-const RegisterScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
+const RegisterScreen = ({ navigation, userProfile, setUserProfile }) => {
   const [tel, setTel] = useState(userProfile?.phone);
   const [firstName, setFirstName] = useState(userProfile?.firstName);
   const [lastName, setLastName] = useState(userProfile?.lastName);
+
+  useEffect(() => {
+    if (userProfile) {
+      navigation.navigate("Home");
+    }
+  }, []);
 
   const register = async () => {
     const profile = { firstName: firstName, lastName: lastName, phone: tel };
@@ -26,7 +32,6 @@ const RegisterScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
     }
 
     setUserProfile(profile);
-    setEditProfile(false);
   };
 
   return (
