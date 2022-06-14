@@ -34,12 +34,12 @@ const HomeScreen = ({ navigation, userProfile }) => {
       {orderStatus ? (
         <OrderStatus orderStatus={orderStatus} navigation={navigation} />
       ) : (
-        // <FindingDrivers />
-        <OrderRequest
-          setOrig={setOrig}
-          setDest={setDest}
-          userProfile={userProfile}
-        />
+        <FindingDrivers />
+        // <OrderRequest
+        //   setOrig={setOrig}
+        //   setDest={setDest}
+        //   userProfile={userProfile}
+        // />
       )}
     </View>
   );
