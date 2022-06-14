@@ -3,7 +3,7 @@ import { Image, StyleSheet, View } from "react-native";
 import { Text, Button } from "react-native-elements";
 import Colors from "../core/Colors";
 
-const PickupScreen = ({ orderStatus }) => {
+const PickupScreen = ({ orderStatus, navigation }) => {
   const [minutesLeft, setMinutesLeft] = useState(
     getMinutesLeft(orderStatus?.time.toDate())
   );
@@ -63,6 +63,7 @@ const PickupScreen = ({ orderStatus }) => {
               buttonStyle={styles.buttonStyle}
               containerStyle={styles.buttonContainerStyle}
               titleStyle={styles.buttonTitleStyle}
+              onPress={() => navigation.navigate("Home")}
             />
           )}
         </View>

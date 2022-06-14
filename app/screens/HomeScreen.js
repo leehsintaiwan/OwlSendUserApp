@@ -1,6 +1,7 @@
 import { doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import FindingDrivers from "../components/FindingDrivers";
 import Map from "../components/Map";
 import OrderRequest from "../components/OrderRequest";
 import OrderStatus from "../components/OrderStatus";
@@ -22,7 +23,6 @@ const HomeScreen = ({ navigation, userProfile }) => {
 
   useEffect(() => {
     if (orderStatus) {
-      console.log(orderStatus.pickup);
       setOrig(orderStatus.pickup);
       setDest(orderStatus.dropoff);
     }
@@ -32,8 +32,9 @@ const HomeScreen = ({ navigation, userProfile }) => {
     <View style={styles.container}>
       <Map orig={orig} dest={dest} />
       {orderStatus ? (
-        <OrderStatus orderStatus={orderStatus} />
+        <OrderStatus orderStatus={orderStatus} navigation={navigation} />
       ) : (
+        // <FindingDrivers />
         <OrderRequest
           setOrig={setOrig}
           setDest={setDest}

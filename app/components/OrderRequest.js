@@ -4,13 +4,15 @@ import { Button, Input, Text } from "react-native-elements";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Colors from "../core/Colors";
 
-const OrderRequest = ({ setOrig, setDest, userProfile }) => {
+const OrderRequest = ({ setOrig, setDest }) => {
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
   const [length, setLength] = useState("");
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
+  const [distance, setDistance] = useState(2.6);
+  const [price, setPrice] = useState(7.0);
 
   const send = () => {};
 
@@ -68,7 +70,7 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
         }}
       />
 
-      <View style={{ marginTop: 10, flexDirection: "row" }}>
+      <View style={styles.recipientContainer}>
         <Input
           containerStyle={{ width: "50%" }}
           placeholder="Recipient's Name"
@@ -87,9 +89,9 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
       </View>
 
       <Text style={styles.dimensionsTitle}>How large is your parcel?</Text>
-      <View style={{ flexDirection: "row" }}>
+      <View style={styles.dimensionsContainer}>
         <Input
-          containerStyle={{ width: "25%" }}
+          containerStyle={{ width: "25%", marginBottom: 0 }}
           placeholder="Length (cm)"
           keyboardType="numeric"
           value={length}
@@ -97,7 +99,7 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
           style={styles.dimensions}
         />
         <Input
-          containerStyle={{ width: "25%" }}
+          containerStyle={{ width: "25%", marginBottom: 0 }}
           placeholder="Width (cm)"
           keyboardType="numeric"
           value={width}
@@ -105,7 +107,7 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
           style={styles.dimensions}
         />
         <Input
-          containerStyle={{ width: "25%" }}
+          containerStyle={{ width: "25%", marginBottom: 0 }}
           placeholder="Height (cm)"
           keyboardType="numeric"
           value={height}
@@ -113,13 +115,24 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
           style={styles.dimensions}
         />
         <Input
-          containerStyle={{ width: "25%" }}
+          containerStyle={{ width: "25%", marginBottom: 0 }}
           placeholder="Weight (kg)"
           keyboardType="numeric"
           value={weight}
           onChangeText={(text) => setWeight(text)}
           style={styles.dimensions}
         />
+      </View>
+      <View style={styles.infoContainer}>
+        <Text h3 style={styles.distanceTitle}>
+          Distance:
+        </Text>
+        <Text h2 style={styles.distance}>
+          {distance >= 10 ? Math.round(distance) : distance.toFixed(1)} mi
+        </Text>
+        <Text h1 style={styles.price}>
+          £{price.toFixed(2)}
+        </Text>
       </View>
       <Button
         title="Send Parcel"
@@ -136,6 +149,22 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
 export default OrderRequest;
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    width: 300,
+    alignSelf: "center",
+    borderRadius: 6,
+    marginBottom: 25,
+  },
+
+  buttonStyle: {
+    backgroundColor: Colors.primary,
+    borderRadius: 6,
+  },
+
+  buttonTitle: {
+    fontWeight: "500",
+  },
+
   container: {
     flex: 1,
     backgroundColor: "white",
@@ -146,13 +175,39 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
 
+  dimensionsContainer: {
+    flexDirection: "row",
+    flexGrow: 1,
+    alignItems: "center",
+  },
+
+  dimensionsTitle: {
+    fontSize: 16,
+    color: "grey",
+    marginLeft: 10,
+  },
+
+  dimensions: {
+    fontSize: 13,
+    textAlign: "center",
+  },
+
+  distanceTitle: {
+    fontWeight: "500",
+  },
+
+  distance: {
+    fontWeight: "500",
+    paddingLeft: 10,
+  },
+
   inputStyles: {
     textInput: {
       width: "100%",
       height: 44,
       fontSize: 18,
       backgroundColor: "whitesmoke",
-      marginTop: 5,
+      marginTop: 3,
       marginHorizontal: 6,
       paddingHorizontal: 4,
     },
@@ -161,31 +216,23 @@ const styles = StyleSheet.create({
     },
   },
 
-  dimensionsTitle: {
-    fontSize: 16,
-    color: "grey",
-    marginLeft: 10,
-    marginTop: 10,
-    marginBottom: 5,
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    flexGrow: 1,
   },
 
-  dimensions: {
-    fontSize: 13,
-  },
-
-  buttonContainer: {
-    width: 300,
-    alignSelf: "center",
-    borderRadius: 6,
-    marginTop: 5,
-  },
-
-  buttonStyle: {
-    backgroundColor: Colors.primary,
-    borderRadius: 6,
-  },
-
-  buttonTitle: {
+  price: {
     fontWeight: "500",
+    position: "absolute",
+    right: 10,
+  },
+
+  recipientContainer: {
+    flexDirection: "row",
+    flexGrow: 1,
+    alignItems: "center",
+    marginTop: 3,
   },
 });
