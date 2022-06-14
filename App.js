@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import HomeScreen from "./app/screens/HomeScreen";
 import RegisterScreen from "./app/screens/RegisterScreen";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -23,15 +24,22 @@ export default function App() {
     }
   };
 
-  const Home = () => {
+  const Home = ({ navigation, route }) => {
     return (
-      <HomeScreen userProfile={userProfile} setEditProfile={setEditProfile} />
+      <HomeScreen
+        navigation={navigation}
+        route={route}
+        userProfile={userProfile}
+        setEditProfile={setEditProfile}
+      />
     );
   };
 
-  const Register = () => {
+  const Register = ({ navigation, route }) => {
     return (
       <RegisterScreen
+        navigation={navigation}
+        route={route}
         userProfile={userProfile}
         setUserProfile={setUserProfile}
         setEditProfile={setEditProfile}
@@ -45,6 +53,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      <StatusBar style="dark" />
       <Stack.Navigator>
         {userProfile && !editProfile ? (
           <Stack.Screen
