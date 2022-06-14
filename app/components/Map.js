@@ -50,8 +50,8 @@ const Map = ({ orig, dest }) => {
       {orig && (
         <Marker
           coordinate={{
-            latitude: orig.location.lat,
-            longitude: orig.location.lng,
+            latitude: orig.location.latitude,
+            longitude: orig.location.longitude,
           }}
           title="Pickup"
           description={orig.shortAddress}
@@ -66,8 +66,8 @@ const Map = ({ orig, dest }) => {
       {dest && (
         <Marker
           coordinate={{
-            latitude: dest.location.lat,
-            longitude: dest.location.lng,
+            latitude: dest.location.latitude,
+            longitude: dest.location.longitude,
           }}
           title="Dropoff"
           description={dest.shortAddress}
@@ -82,12 +82,12 @@ const Map = ({ orig, dest }) => {
       {orig && dest && (
         <MapViewDirections
           origin={{
-            latitude: orig.location.lat,
-            longitude: orig.location.lng,
+            latitude: orig.location.latitude,
+            longitude: orig.location.longitude,
           }}
           destination={{
-            latitude: dest.location.lat,
-            longitude: dest.location.lng,
+            latitude: dest.location.latitude,
+            longitude: dest.location.longitude,
           }}
           apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
           strokeWidth={3}

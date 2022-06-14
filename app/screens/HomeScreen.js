@@ -20,6 +20,14 @@ const HomeScreen = ({ navigation, userProfile }) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (orderStatus) {
+      console.log(orderStatus.pickup);
+      setOrig(orderStatus.pickup);
+      setDest(orderStatus.dropoff);
+    }
+  }, [orderStatus]);
+
   return (
     <View style={styles.container}>
       <Map orig={orig} dest={dest} />
@@ -30,7 +38,6 @@ const HomeScreen = ({ navigation, userProfile }) => {
           setOrig={setOrig}
           setDest={setDest}
           userProfile={userProfile}
-          navigation={navigation}
         />
       )}
     </View>
