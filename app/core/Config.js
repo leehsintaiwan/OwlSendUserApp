@@ -38,7 +38,6 @@ export const db = getFirestore(app);
 
 //   const Update = () => {
 //     const newDocData = {
-//       name: "Vincent",
 //       bio: "Student",
 //     };
 

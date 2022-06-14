@@ -10,7 +10,7 @@ import {
 import { Button, Input, Text } from "react-native-elements";
 import Colors from "../core/Colors";
 
-const LoginScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
+const RegisterScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
   const [tel, setTel] = useState(userProfile?.phone);
   const [firstName, setFirstName] = useState(userProfile?.firstName);
   const [lastName, setLastName] = useState(userProfile?.lastName);
@@ -78,7 +78,7 @@ const LoginScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -43,8 +43,8 @@ const Map = ({ orig, dest }) => {
       region={{
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
-        latitudeDelta: 0.06,
-        longitudeDelta: 0.06,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
       }}
     >
       {orig && (

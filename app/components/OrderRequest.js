@@ -24,6 +24,7 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
         textInputProps={{
           placeholderTextColor: "#5d5d5d",
         }}
+        enablePoweredByContainer={false}
         onPress={(data, details = null) => {
           setOrig({
             location: details.geometry.location,
@@ -47,6 +48,7 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
         textInputProps={{
           placeholderTextColor: "#5d5d5d",
         }}
+        enablePoweredByContainer={false}
         onPress={(data, details = null) => {
           setDest({
             location: details.geometry.location,
@@ -55,12 +57,6 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
             postcode: details.address_components.slice(-1)[0].long_name,
           });
         }}
-        // onPress={(data, details = null) => {
-        //   setCenterAddress({
-        //     location: details.geometry.location,
-        //     address: data.description,
-        //   });
-        // }}
         fetchDetails={true}
         returnKeyType={"search"}
         placeholder="Dropoff Address"
