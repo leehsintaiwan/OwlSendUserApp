@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
 
   buttonContainerStyle: {
     marginTop: 12,
-    width: "60%",
+    width: 200,
     borderRadius: 6,
   },
 

@@ -22,7 +22,7 @@ const LoginScreen = ({ userProfile, setUserProfile, setEditProfile }) => {
     try {
       await AsyncStorage.setItem("profile", JSON.stringify({ profile }));
     } catch (e) {
-      console.log(err);
+      console.log(e);
     }
 
     setUserProfile(profile);

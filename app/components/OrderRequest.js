@@ -21,6 +21,9 @@ const OrderRequest = ({ setOrigin, setDestination, userProfile }) => {
     >
       <GooglePlacesAutocomplete
         styles={styles.inputStyles}
+        textInputProps={{
+          placeholderTextColor: "#5d5d5d",
+        }}
         onPress={(data, details = null) => {
           setOrigin({
             location: details.geometry.location,
@@ -41,6 +44,9 @@ const OrderRequest = ({ setOrigin, setDestination, userProfile }) => {
       />
       <GooglePlacesAutocomplete
         styles={styles.inputStyles}
+        textInputProps={{
+          placeholderTextColor: "#5d5d5d",
+        }}
         onPress={(data, details = null) => {
           setDestination({
             location: details.geometry.location,
@@ -135,16 +141,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     height: "45%",
     width: "100%",
+    paddingVertical: 5,
   },
 
   inputStyles: {
     textInput: {
       width: "100%",
       height: 44,
-      color: "#5d5d5d",
       fontSize: 18,
-      // backgroundColor: "grey",
-      borderRadius: 6,
+      backgroundColor: "whitesmoke",
       marginTop: 5,
       marginHorizontal: 6,
       paddingHorizontal: 4,
@@ -167,10 +172,10 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    width: "80%",
+    width: 300,
     alignSelf: "center",
     borderRadius: 6,
-    marginTop: 10,
+    marginTop: 5,
   },
 
   buttonStyle: {

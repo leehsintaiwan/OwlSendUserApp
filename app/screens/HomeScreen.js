@@ -13,6 +13,8 @@ const HomeScreen = ({ userProfile, setEditProfile }) => {
   const [destination, setDestination] = useState(null);
 
   useEffect(() => {
+    console.log(userProfile);
+
     return onSnapshot(orderDoc, (doc) => {
       setOrderStatus(doc.data());
     });
