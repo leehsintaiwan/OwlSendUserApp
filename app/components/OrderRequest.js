@@ -55,6 +55,12 @@ const OrderRequest = ({ setOrig, setDest, userProfile }) => {
             postcode: details.address_components.slice(-1)[0].long_name,
           });
         }}
+        // onPress={(data, details = null) => {
+        //   setCenterAddress({
+        //     location: details.geometry.location,
+        //     address: data.description,
+        //   });
+        // }}
         fetchDetails={true}
         returnKeyType={"search"}
         placeholder="Dropoff Address"

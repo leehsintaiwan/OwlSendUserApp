@@ -5,7 +5,7 @@ import MapViewDirections from "react-native-maps-directions";
 import Colors from "../core/Colors";
 import * as Location from "expo-location";
 
-const Map = ({ origin, destination }) => {
+const Map = ({ orig, dest }) => {
   const [currentLocation, setCurrentLocation] = useState({
     latitude: 51.498733, // This is the Geoloaction of Huxley!
     longitude: -0.179461, // Change to user's current location later on.
