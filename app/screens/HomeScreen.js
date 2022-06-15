@@ -33,33 +33,20 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
   const Form = () => {
     return (
       <OrderRequest
-        // navigation={navigation}
-        // route={route}
         setOrig={setOrig}
         setDest={setDest}
         userProfile={userProfile}
+        orderStatus={orderStatus}
       />
     );
   };
 
   const Finding = () => {
-    return (
-      <FindingDrivers
-        // navigation={navigation}
-        // route={route}
-        orderStatus={orderStatus}
-      />
-    );
+    return <FindingDrivers orderStatus={orderStatus} />;
   };
 
   const Status = () => {
-    return (
-      <OrderStatus
-        // navigation={navigation}
-        // route={route}
-        orderStatus={orderStatus}
-      />
-    );
+    return <OrderStatus orderStatus={orderStatus} />;
   };
 
   const Stack = createNativeStackNavigator();

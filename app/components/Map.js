@@ -27,11 +27,36 @@ const Map = ({ orig, dest }) => {
   };
 
   useEffect(() => {
-    if (!orig || !dest) return;
-    mapRef.current.fitToSuppliedMarkers(["orig", "dest"], {
-      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-    });
     getCurrentLocation();
+  }, []);
+
+  useEffect(() => {
+    // if (!orig && !dest) return;
+    if (orig && dest) {
+      mapRef.current.fitToSuppliedMarkers(["orig", "dest"], {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+      });
+    } else if (orig) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: orig.location.latitude,
+          longitude: orig.location.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        },
+        250
+      );
+    } else if (dest) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: dest.location.latitude,
+          longitude: dest.location.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        },
+        250
+      );
+    }
   }, [orig, dest]);
 
   return (
@@ -40,7 +65,7 @@ const Map = ({ orig, dest }) => {
       ref={mapRef}
       style={{ flex: 1 }}
       mapType="mutedStandard"
-      initialRegion={{
+      region={{
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
         latitudeDelta: 0.05,

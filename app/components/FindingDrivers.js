@@ -1,4 +1,3 @@
-import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import Colors from "../core/Colors";
@@ -27,6 +26,7 @@ export default FindingDrivers;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
+    flex: 1,
   },
 
   gif: {

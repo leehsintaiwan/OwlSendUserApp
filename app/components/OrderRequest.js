@@ -11,7 +11,7 @@ import {
   setDoc,
   GeoPoint,
 } from "firebase/firestore";
-// import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 const OrderRequest = ({ setOrig, setDest, userProfile, orderStatus }) => {
   const [recipientName, setRecipientName] = useState("");
@@ -23,23 +23,19 @@ const OrderRequest = ({ setOrig, setDest, userProfile, orderStatus }) => {
   const [distance, setDistance] = useState(2.6);
   const [price, setPrice] = useState(7.0);
 
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (orderStatus) {
-      // navigation.navigate("Status");
+      navigation.navigate("Status");
     }
   }, []);
 
   const handleSend = () => {
-    // navigation.navigate("Finding");
+    navigation.navigate("Finding");
   };
 
   return (
-    // <KeyboardAvoidingView
-    //   behavior={Platform.OS === "ios" ? "padding" : "height"}
-    //   style={styles.container}
-    // >
     <View style={styles.container}>
       <GooglePlacesAutocomplete
         styles={styles.inputStyles}
@@ -169,7 +165,6 @@ const OrderRequest = ({ setOrig, setDest, userProfile, orderStatus }) => {
         titleStyle={styles.buttonTitle}
       />
     </View>
-    // </KeyboardAvoidingView>
   );
 };
 
