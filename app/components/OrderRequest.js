@@ -15,6 +15,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
+// Price = Distance in miles * PRICE_FACTOR
+const PRICE_FACTOR = 2;
+
 const OrderRequest = ({
   orig,
   dest,
@@ -29,8 +32,8 @@ const OrderRequest = ({
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [distance, setDistance] = useState(2.6);
-  const [price, setPrice] = useState(7.0);
+  const [distance, setDistance] = useState(0.0);
+  const [price, setPrice] = useState(0.0);
   const refOrig = useRef();
   const refDest = useRef();
   const navigation = useNavigation();
@@ -42,34 +45,39 @@ const OrderRequest = ({
   }, []);
 
   useEffect(() => {
-  if (orig) {
-    refOrig.current?.setAddressText(orig.address);
-  }
+    if (orig) {
+      refOrig.current?.setAddressText(orig.address);
+    }
 
-  if (dest) {
-    refDest.current?.setAddressText(dest.address);
-  }
-}, []);
+    if (dest) {
+      refDest.current?.setAddressText(dest.address);
+    }
+  }, []);
 
   useEffect(() => {
     if (!orig || !dest) return;
 
     const getDistance = async () => {
       fetch(
-        `https://maps.googleapis.com/maps/api/distancematrix/json?
-        units=imperial&origins=${orig.address}&destinations=${dest.address}
-        &key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`
+        `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${
+          orig.address
+        }&destinations=${
+          dest.address
+        }&units=imperial&key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`
       )
-      .then((res) => res.json())
-      .then((data) => {
-        setDistance(parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0]))
-      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setDistance(
+            parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0])
+          );
+        });
     };
     getDistance();
   }, [orig, dest]);
 
   useEffect(() => {
-    setPrice(distance*2);
+    setPrice(distance * PRICE_FACTOR);
   }, [distance]);
 
   const handleSend = () => {
@@ -237,13 +245,18 @@ const OrderRequest = ({
         />
       </View>
       <View style={styles.infoContainer}>
-        <Text h3 style={styles.distanceTitle}>
+        <Text
+          h3
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          style={styles.distanceTitle}
+        >
           Distance:
         </Text>
-        <Text h2 style={styles.distance}>
-          {distance >= 10 ? Math.round(distance) : distance.toFixed(1)} mi
+        <Text h2 numberOfLines={1} adjustsFontSizeToFit style={styles.distance}>
+          {distance} mi
         </Text>
-        <Text h1 style={styles.price}>
+        <Text h1 numberOfLines={1} adjustsFontSizeToFit style={styles.price}>
           £{price.toFixed(2)}
         </Text>
       </View>
@@ -304,11 +317,13 @@ const styles = StyleSheet.create({
 
   distanceTitle: {
     fontWeight: "500",
+    width: "32%",
   },
 
   distance: {
     fontWeight: "500",
-    paddingLeft: 10,
+    paddingLeft: 5,
+    width: "30%",
   },
 
   inputStyles: {
@@ -337,13 +352,15 @@ const styles = StyleSheet.create({
   locationButton: {},
 
   locationContainer: {
-    // backgroundColor: "red",
     position: "absolute",
     right: 35,
     top: 8,
   },
 
   price: {
+    // backgroundColor: "red",
+    width: "35%",
+    textAlign: "right",
     fontWeight: "500",
     position: "absolute",
     right: 10,
