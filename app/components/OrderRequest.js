@@ -25,6 +25,7 @@ const OrderRequest = ({
   setDest,
   userProfile,
   orderStatus,
+  currentLocation,
 }) => {
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
@@ -67,7 +68,6 @@ const OrderRequest = ({
       )
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setDistance(
             parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0])
           );
@@ -84,36 +84,25 @@ const OrderRequest = ({
     navigation.navigate("Finding");
   };
 
-  const getCurrentLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
-      return;
-    }
-
-    let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.Balanced,
+  const useCurrentLocation = async () => {
+    const { latitude, longitude } = currentLocation;
+    let response = await Location.reverseGeocodeAsync({
+      latitude,
+      longitude,
     });
-    if (location) {
-      const { latitude, longitude } = location.coords;
-      let response = await Location.reverseGeocodeAsync({
+
+    let address = `${response[0].name}, ${response[0].street}, ${response[0].city}, ${response[0].postalCode}`;
+    refOrig.current?.setAddressText(address);
+
+    setOrig({
+      location: {
         latitude,
         longitude,
-      });
-
-      let address = `${response[0].name}, ${response[0].street}, ${response[0].city}, ${response[0].postalCode}`;
-      refOrig.current?.setAddressText(address);
-
-      setOrig({
-        location: {
-          latitude: latitude,
-          longitude: longitude,
-        },
-        address: address,
-        shortAddress: response[0].name,
-        postcode: response[0].postalCode,
-      });
-    }
+      },
+      address: address,
+      shortAddress: response[0].name,
+      postcode: response[0].postalCode,
+    });
   };
 
   return (
@@ -151,7 +140,7 @@ const OrderRequest = ({
           <TouchableOpacity
             style={styles.locationButton}
             onPress={() => {
-              getCurrentLocation();
+              useCurrentLocation();
             }}
           >
             <FontAwesome

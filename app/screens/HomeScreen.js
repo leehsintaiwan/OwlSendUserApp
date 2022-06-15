@@ -1,5 +1,5 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import * as Location from "expo-location";
 import { doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -14,8 +14,26 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
   const [orderStatus, setOrderStatus] = useState(null);
   const [orig, setOrig] = useState(null);
   const [dest, setDest] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState({
+    latitude: 0, //51.498733, // This is the Geoloaction of Huxley!
+    longitude: 0, //-0.179461, // Change to user's current location later on.
+  });
+
+  const getCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.Balanced,
+    });
+    setCurrentLocation(location.coords);
+  };
 
   useEffect(() => {
+    getCurrentLocation();
     console.log(userProfile);
 
     return onSnapshot(orderDoc, (doc) => {
@@ -39,6 +57,7 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
         setDest={setDest}
         userProfile={userProfile}
         orderStatus={orderStatus}
+        currentLocation={currentLocation}
       />
     );
   };
@@ -56,7 +75,7 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
   return (
     <View style={styles.container}>
       <View style={{ flex: 0.55 }}>
-        <Map orig={orig} dest={dest} />
+        <Map orig={orig} dest={dest} currentLocation={currentLocation} />
       </View>
       <View style={{ flex: 0.45 }}>
         <Stack.Navigator initialRouteName="Form">
