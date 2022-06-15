@@ -3,11 +3,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from "react-native";
 import HomeScreen from "./app/screens/HomeScreen";
 import RegisterScreen from "./app/screens/RegisterScreen";
 
@@ -56,25 +51,18 @@ export default function App() {
   return (
     <NavigationContainer>
       <StatusBar style="dark" />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1 }}
-        >
-          <Stack.Navigator initialRouteName="Register">
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{ headerShown: false, gestureEnabled: false }}
-            />
-            <Stack.Screen
-              name="Register"
-              component={Register}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+      <Stack.Navigator initialRouteName="Register">
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

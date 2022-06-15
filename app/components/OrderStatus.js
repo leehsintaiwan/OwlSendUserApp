@@ -3,12 +3,14 @@ import { Image, StyleSheet, View } from "react-native";
 import { Text, Button } from "react-native-elements";
 import Colors from "../core/Colors";
 
-const OrderStatus = ({ orderStatus }) => {
+const OrderStatus = ({ navigation, orderStatus, setShowSettings }) => {
   const [minutesLeft, setMinutesLeft] = useState(
     getMinutesLeft(orderStatus?.time.toDate())
   );
 
   useEffect(() => {
+    setShowSettings(false);
+
     const interval = setInterval(() => {
       setMinutesLeft(getMinutesLeft(orderStatus?.time.toDate()));
     }, 1000);
@@ -63,7 +65,7 @@ const OrderStatus = ({ orderStatus }) => {
               buttonStyle={styles.buttonStyle}
               containerStyle={styles.buttonContainerStyle}
               titleStyle={styles.buttonTitleStyle}
-              onPress={() => navigation.navigate("Home")}
+              onPress={() => navigation.navigate("Home", { screen: "Form" })}
             />
           )}
         </View>

@@ -6,6 +6,8 @@ import {
   StyleSheet,
   View,
   Image,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Button, Input, Text } from "react-native-elements";
 import Colors from "../core/Colors";
@@ -35,51 +37,52 @@ const RegisterScreen = ({ navigation, userProfile, setUserProfile }) => {
   };
 
   return (
-    <View
-      // behavior={Platform.OS === "ios" ? "padding" : "height"}
-      // enabled
-      style={styles.container}
-    >
-      <Image
-        source={require("../assets/owl-send-logo-transparent-bg.png")}
-        style={{ width: "100%", height: 170 }}
-      />
-      <Text h4 style={{ marginTop: 20, marginBottom: 10, fontWeight: "700" }}>
-        Create an User Account
-      </Text>
-      <View style={styles.inputContainer}>
-        <View style={{ flexDirection: "row" }}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <Image
+          source={require("../assets/owl-send-logo-transparent-bg.png")}
+          style={{ width: "100%", height: 170 }}
+        />
+        <Text h4 style={{ marginTop: 20, marginBottom: 10, fontWeight: "700" }}>
+          Create an User Account
+        </Text>
+        <View style={styles.inputContainer}>
+          <View style={{ flexDirection: "row" }}>
+            <Input
+              containerStyle={{ width: "50%" }}
+              placeholder="First Name"
+              type="text"
+              value={firstName}
+              onChangeText={(text) => setFirstName(text)}
+            />
+            <Input
+              containerStyle={{ width: "50%" }}
+              placeholder="Last Name"
+              type="text"
+              value={lastName}
+              onChangeText={(text) => setLastName(text)}
+            />
+          </View>
           <Input
-            containerStyle={{ width: "50%" }}
-            placeholder="First Name"
-            type="text"
-            value={firstName}
-            onChangeText={(text) => setFirstName(text)}
-          />
-          <Input
-            containerStyle={{ width: "50%" }}
-            placeholder="Last Name"
-            type="text"
-            value={lastName}
-            onChangeText={(text) => setLastName(text)}
+            placeholder="Phone Number"
+            type="tel"
+            value={tel}
+            onChangeText={(text) => setTel(text)}
+            keyboardType={"phone-pad"}
           />
         </View>
-        <Input
-          placeholder="Phone Number"
-          type="tel"
-          value={tel}
-          onChangeText={(text) => setTel(text)}
-          keyboardType={"phone-pad"}
+        <Button
+          buttonStyle={styles.buttonStyle}
+          title="Continue"
+          containerStyle={styles.button}
+          onPress={register}
+          titleStyle={styles.buttonTitle}
         />
-      </View>
-      <Button
-        buttonStyle={styles.buttonStyle}
-        title="Continue"
-        containerStyle={styles.button}
-        onPress={register}
-        titleStyle={styles.buttonTitle}
-      />
-    </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 

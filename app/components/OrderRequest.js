@@ -12,13 +12,13 @@ import {
   setDoc,
   GeoPoint,
 } from "firebase/firestore";
-import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 // Price = Distance in miles * PRICE_FACTOR
 const PRICE_FACTOR = 2;
 
 const OrderRequest = ({
+  navigation,
   orig,
   dest,
   setOrig,
@@ -26,6 +26,7 @@ const OrderRequest = ({
   userProfile,
   orderStatus,
   currentLocation,
+  setShowSettings,
 }) => {
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
@@ -37,15 +38,10 @@ const OrderRequest = ({
   const [price, setPrice] = useState(0.0);
   const refOrig = useRef();
   const refDest = useRef();
-  const navigation = useNavigation();
 
   useEffect(() => {
-    if (orderStatus) {
-      // navigation.navigate("Status");
-    }
-  }, []);
+    setShowSettings(true);
 
-  useEffect(() => {
     if (orig) {
       refOrig.current?.setAddressText(orig.address);
     }
@@ -81,7 +77,6 @@ const OrderRequest = ({
   }, [distance]);
 
   const handleSend = () => {
-    setShowSettings(false);
     navigation.navigate("Finding");
   };
 
