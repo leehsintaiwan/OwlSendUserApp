@@ -33,6 +33,8 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
   const Form = () => {
     return (
       <OrderRequest
+        orig={orig}
+        dest={dest}
         setOrig={setOrig}
         setDest={setDest}
         userProfile={userProfile}
@@ -57,7 +59,6 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
         <Map orig={orig} dest={dest} />
       </View>
       <View style={{ flex: 0.45 }}>
-        {/* {Form()} */}
         <Stack.Navigator initialRouteName="Form">
           <Stack.Screen
             name="Form"
