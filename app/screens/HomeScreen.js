@@ -2,11 +2,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Location from "expo-location";
 import { doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FindingDrivers from "../components/FindingDrivers";
 import Map from "../components/Map";
 import OrderRequest from "../components/OrderRequest";
 import OrderStatus from "../components/OrderStatus";
+import Colors from "../core/Colors";
 import { db } from "../core/Config";
 
 const HomeScreen = ({ navigation, userProfile, route }) => {
@@ -15,8 +17,8 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
   const [orig, setOrig] = useState(null);
   const [dest, setDest] = useState(null);
   const [currentLocation, setCurrentLocation] = useState({
-    latitude: 0, //51.498733, // This is the Geoloaction of Huxley!
-    longitude: 0, //-0.179461, // Change to user's current location later on.
+    latitude: 51.498733, // This is the Geoloaction of Huxley!
+    longitude: -0.179461, // Change to user's current location later on.
   });
 
   const getCurrentLocation = async () => {
@@ -77,6 +79,11 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
       <View style={{ flex: 0.55 }}>
         <Map orig={orig} dest={dest} currentLocation={currentLocation} />
       </View>
+      <View style={styles.settingsIcon}>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <FontAwesome name="cog" size={40} color={Colors.primary} />
+        </TouchableOpacity>
+      </View>
       <View style={{ flex: 0.45 }}>
         <Stack.Navigator initialRouteName="Form">
           <Stack.Screen
@@ -107,5 +114,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: "center",
+  },
+
+  settingsIcon: {
+    position: "absolute",
+    top: "7%",
+    right: "6%",
   },
 });
