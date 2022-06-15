@@ -29,7 +29,7 @@ const Map = ({ orig, dest }) => {
   useEffect(() => {
     if (!orig || !dest) return;
     mapRef.current.fitToSuppliedMarkers(["orig", "dest"], {
-      edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
+      edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
     });
     getCurrentLocation();
   }, [orig, dest]);
@@ -40,7 +40,7 @@ const Map = ({ orig, dest }) => {
       ref={mapRef}
       style={{ flex: 1 }}
       mapType="mutedStandard"
-      region={{
+      initialRegion={{
         latitude: currentLocation.latitude,
         longitude: currentLocation.longitude,
         latitudeDelta: 0.05,

@@ -49,7 +49,10 @@ const OrderRequest = ({ setOrig, setDest, userProfile, orderStatus }) => {
         enablePoweredByContainer={false}
         onPress={(data, details = null) => {
           setOrig({
-            location: details.geometry.location,
+            location: {
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+            },
             shortAddress: details.name,
             address: details.formatted_address,
             postcode: details.address_components.slice(-1)[0].long_name,
@@ -73,7 +76,10 @@ const OrderRequest = ({ setOrig, setDest, userProfile, orderStatus }) => {
         enablePoweredByContainer={false}
         onPress={(data, details = null) => {
           setDest({
-            location: details.geometry.location,
+            location: {
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+            },
             shortAddress: details.name,
             address: details.formatted_address,
             postcode: details.address_components.slice(-1)[0].long_name,
