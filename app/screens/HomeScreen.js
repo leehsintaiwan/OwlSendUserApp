@@ -22,7 +22,7 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
   const getCurrentLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
+      console.log("Permission to access location was denied");
       return;
     }
 

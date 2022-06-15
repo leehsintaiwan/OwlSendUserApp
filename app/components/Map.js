@@ -5,15 +5,7 @@ import MapViewDirections from "react-native-maps-directions";
 import Colors from "../core/Colors";
 
 const Map = ({ orig, dest, currentLocation }) => {
-  const [errorMsg, setErrorMsg] = useState(null);
   const mapRef = useRef(null);
-
-  // useEffect(() => {
-  //   if (!orig && !dest) {
-  //     console.log(orig, dest);
-  //     getCurrentLocation();
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (orig && dest) {
@@ -43,19 +35,17 @@ const Map = ({ orig, dest, currentLocation }) => {
     }
   }, [orig, dest]);
 
-  // useEffect(() => {
-  //   if (currentLocation && !orig && !dest) {
-  //     mapRef.current.animateToRegion(
-  //       {
-  //         latitude: currentLocation.latitude,
-  //         longitude: currentLocation.longitude,
-  //         latitudeDelta: 0.05,
-  //         longitudeDelta: 0.05,
-  //       },
-  //       0
-  //     );
-  //   }
-  // }, [currentLocation]);
+  useEffect(() => {
+    mapRef.current.animateToRegion(
+      {
+        latitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      },
+      1
+    );
+  }, [currentLocation]);
 
   return (
     <MapView
