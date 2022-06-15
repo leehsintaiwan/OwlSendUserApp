@@ -3,7 +3,7 @@ import { Image, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import Colors from "../core/Colors";
 
-const FindingDrivers = () => {
+const FindingDrivers = ({ orderStatus }) => {
   return (
     <View style={styles.container}>
       <View style={styles.statusContainer}>
@@ -27,10 +27,6 @@ export default FindingDrivers;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    position: "absolute",
-    bottom: 0,
-    height: "45%",
-    width: "100%",
   },
 
   gif: {

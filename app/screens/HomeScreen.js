@@ -1,3 +1,5 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
@@ -7,7 +9,7 @@ import OrderRequest from "../components/OrderRequest";
 import OrderStatus from "../components/OrderStatus";
 import { db } from "../core/Config";
 
-const HomeScreen = ({ navigation, userProfile }) => {
+const HomeScreen = ({ navigation, userProfile, route }) => {
   const orderDoc = doc(db, "UserOrders", userProfile.phone);
   const [orderStatus, setOrderStatus] = useState(null);
   const [orig, setOrig] = useState(null);
@@ -28,19 +30,65 @@ const HomeScreen = ({ navigation, userProfile }) => {
     }
   }, [orderStatus]);
 
+  const Form = () => {
+    return (
+      <OrderRequest
+        // navigation={navigation}
+        // route={route}
+        setOrig={setOrig}
+        setDest={setDest}
+        userProfile={userProfile}
+      />
+    );
+  };
+
+  const Finding = () => {
+    return (
+      <FindingDrivers
+        // navigation={navigation}
+        // route={route}
+        orderStatus={orderStatus}
+      />
+    );
+  };
+
+  const Status = () => {
+    return (
+      <OrderStatus
+        // navigation={navigation}
+        // route={route}
+        orderStatus={orderStatus}
+      />
+    );
+  };
+
+  const Stack = createNativeStackNavigator();
+
   return (
     <View style={styles.container}>
-      <Map orig={orig} dest={dest} />
-      {orderStatus ? (
-        <OrderStatus orderStatus={orderStatus} navigation={navigation} />
-      ) : (
-        <FindingDrivers />
-        // <OrderRequest
-        //   setOrig={setOrig}
-        //   setDest={setDest}
-        //   userProfile={userProfile}
-        // />
-      )}
+      <View style={{ flex: 0.55 }}>
+        <Map orig={orig} dest={dest} />
+      </View>
+      <View style={{ flex: 0.45 }}>
+        {/* {Form()} */}
+        <Stack.Navigator initialRouteName="Form">
+          <Stack.Screen
+            name="Form"
+            component={Form}
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
+          <Stack.Screen
+            name="Finding"
+            component={Finding}
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
+          <Stack.Screen
+            name="Status"
+            component={Status}
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
+        </Stack.Navigator>
+      </View>
     </View>
   );
 };

@@ -1,10 +1,19 @@
-import { React, useState } from "react";
-import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
+import { React, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import { Button, Input, Text } from "react-native-elements";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Colors from "../core/Colors";
+import { db } from "../core/Config";
+import {
+  doc,
+  onSnapshot,
+  updateDoc,
+  setDoc,
+  GeoPoint,
+} from "firebase/firestore";
+// import { useNavigation } from "@react-navigation/native";
 
-const OrderRequest = ({ setOrig, setDest }) => {
+const OrderRequest = ({ setOrig, setDest, userProfile, orderStatus }) => {
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
   const [length, setLength] = useState("");
@@ -14,13 +23,24 @@ const OrderRequest = ({ setOrig, setDest }) => {
   const [distance, setDistance] = useState(2.6);
   const [price, setPrice] = useState(7.0);
 
-  const send = () => {};
+  // const navigation = useNavigation();
+
+  useEffect(() => {
+    if (orderStatus) {
+      // navigation.navigate("Status");
+    }
+  }, []);
+
+  const handleSend = () => {
+    // navigation.navigate("Finding");
+  };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
+    // <KeyboardAvoidingView
+    //   behavior={Platform.OS === "ios" ? "padding" : "height"}
+    //   style={styles.container}
+    // >
+    <View style={styles.container}>
       <GooglePlacesAutocomplete
         styles={styles.inputStyles}
         textInputProps={{
@@ -137,12 +157,13 @@ const OrderRequest = ({ setOrig, setDest }) => {
       <Button
         title="Send Parcel"
         raised
-        onPress={send}
+        onPress={handleSend}
         containerStyle={styles.buttonContainer}
         buttonStyle={styles.buttonStyle}
         titleStyle={styles.buttonTitle}
       />
-    </KeyboardAvoidingView>
+    </View>
+    // </KeyboardAvoidingView>
   );
 };
 
@@ -168,10 +189,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    position: "absolute",
-    bottom: 0,
-    height: "45%",
-    width: "100%",
     paddingVertical: 5,
   },
 
@@ -185,6 +202,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "grey",
     marginLeft: 10,
+    flexGrow: 1,
   },
 
   dimensions: {

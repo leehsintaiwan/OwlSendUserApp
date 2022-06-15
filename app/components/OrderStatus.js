@@ -3,7 +3,7 @@ import { Image, StyleSheet, View } from "react-native";
 import { Text, Button } from "react-native-elements";
 import Colors from "../core/Colors";
 
-const PickupScreen = ({ orderStatus, navigation }) => {
+const PickupScreen = ({ orderStatus }) => {
   const [minutesLeft, setMinutesLeft] = useState(
     getMinutesLeft(orderStatus?.time.toDate())
   );
@@ -145,10 +145,6 @@ const styles = StyleSheet.create({
 
   container: {
     backgroundColor: "white",
-    position: "absolute",
-    bottom: 0,
-    height: "45%",
-    width: "100%",
   },
 
   driverContainer: {
