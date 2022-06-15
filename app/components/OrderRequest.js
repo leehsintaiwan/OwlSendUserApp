@@ -42,14 +42,35 @@ const OrderRequest = ({
   }, []);
 
   useEffect(() => {
-    if (orig) {
-      refOrig.current?.setAddressText(orig.address);
-    }
+  if (orig) {
+    refOrig.current?.setAddressText(orig.address);
+  }
 
-    if (dest) {
-      refDest.current?.setAddressText(dest.address);
-    }
-  }, []);
+  if (dest) {
+    refDest.current?.setAddressText(dest.address);
+  }
+}, []);
+
+  useEffect(() => {
+    if (!orig || !dest) return;
+
+    const getDistance = async () => {
+      fetch(
+        `https://maps.googleapis.com/maps/api/distancematrix/json?
+        units=imperial&origins=${orig.address}&destinations=${dest.address}
+        &key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`
+      )
+      .then((res) => res.json())
+      .then((data) => {
+        setDistance(parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0]))
+      })
+    };
+    getDistance();
+  }, [orig, dest]);
+
+  useEffect(() => {
+    setPrice(distance*2);
+  }, [distance]);
 
   const handleSend = () => {
     navigation.navigate("Finding");
