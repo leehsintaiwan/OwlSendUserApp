@@ -40,6 +40,16 @@ const OrderRequest = ({
   }, []);
 
   useEffect(() => {
+  if (orig) {
+    refOrig.current?.setAddressText(orig.address);
+  }
+
+  if (dest) {
+    refDest.current?.setAddressText(dest.address);
+  }
+}, []);
+
+  useEffect(() => {
     if (!orig || !dest) return;
 
     const getDistance = async () => {
@@ -54,14 +64,6 @@ const OrderRequest = ({
       })
     };
     getDistance();
-
-    if (orig) {
-      refOrig.current?.setAddressText(orig.address);
-    }
-
-    if (dest) {
-      refDest.current?.setAddressText(dest.address);
-    }
   }, [orig, dest]);
 
   useEffect(() => {
