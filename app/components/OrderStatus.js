@@ -3,7 +3,7 @@ import { Image, StyleSheet, View } from "react-native";
 import { Text, Button } from "react-native-elements";
 import Colors from "../core/Colors";
 
-const PickupScreen = ({ orderStatus }) => {
+const OrderStatus = ({ orderStatus }) => {
   const [minutesLeft, setMinutesLeft] = useState(
     getMinutesLeft(orderStatus?.time.toDate())
   );
@@ -72,7 +72,7 @@ const PickupScreen = ({ orderStatus }) => {
   );
 };
 
-export default PickupScreen;
+export default OrderStatus;
 
 const getMinutesLeft = (time) => {
   const NANOSECONDS_IN_MINUTE = 60000;

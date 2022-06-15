@@ -41,7 +41,7 @@ const OrderRequest = ({
 
   useEffect(() => {
     if (orderStatus) {
-      navigation.navigate("Status");
+      // navigation.navigate("Status");
     }
   }, []);
 
@@ -81,6 +81,7 @@ const OrderRequest = ({
   }, [distance]);
 
   const handleSend = () => {
+    setShowSettings(false);
     navigation.navigate("Finding");
   };
 

@@ -11,7 +11,7 @@ import OrderStatus from "../components/OrderStatus";
 import Colors from "../core/Colors";
 import { db } from "../core/Config";
 
-const HomeScreen = ({ navigation, userProfile, route }) => {
+const HomeScreen = ({ navigation, userProfile }) => {
   const orderDoc = doc(db, "UserOrders", userProfile.phone);
   const [orderStatus, setOrderStatus] = useState(null);
   const [orig, setOrig] = useState(null);
@@ -20,6 +20,7 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
     latitude: 51.498733, // This is the Geoloaction of Huxley!
     longitude: -0.179461, // Change to user's current location later on.
   });
+  const [showSettings, setShowSettings] = useState(true);
 
   const getCurrentLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -36,7 +37,6 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
 
   useEffect(() => {
     getCurrentLocation();
-    console.log(userProfile);
 
     return onSnapshot(orderDoc, (doc) => {
       setOrderStatus(doc.data());
@@ -79,11 +79,13 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
       <View style={{ flex: 0.55 }}>
         <Map orig={orig} dest={dest} currentLocation={currentLocation} />
       </View>
-      <View style={styles.settingsIcon}>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <FontAwesome name="cog" size={40} color={Colors.primary} />
-        </TouchableOpacity>
-      </View>
+      {showSettings && (
+        <View style={styles.settingsIcon}>
+          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+            <FontAwesome name="cog" size={40} color={Colors.primary} />
+          </TouchableOpacity>
+        </View>
+      )}
       <View style={{ flex: 0.45 }}>
         <Stack.Navigator initialRouteName="Form">
           <Stack.Screen

@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import Colors from "../core/Colors";
+import { useNavigation } from "@react-navigation/native";
 
 const FindingDrivers = ({ orderStatus }) => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <View style={styles.statusContainer}>
