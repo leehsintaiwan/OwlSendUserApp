@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Input, Text } from "react-native-elements";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -13,16 +13,24 @@ import {
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
-const OrderRequest = ({ orig, setOrig, dest, setDest, userProfile, orderStatus }) => {
+const OrderRequest = ({
+  orig,
+  dest,
+  setOrig,
+  setDest,
+  userProfile,
+  orderStatus,
+}) => {
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
   const [length, setLength] = useState("");
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [distance, setDistance] = useState(0.0);
-  const [price, setPrice] = useState(0.0);
-
+  const [distance, setDistance] = useState(2.6);
+  const [price, setPrice] = useState(7.0);
+  const refOrig = useRef();
+  const refDest = useRef();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -46,6 +54,14 @@ const OrderRequest = ({ orig, setOrig, dest, setDest, userProfile, orderStatus }
       })
     };
     getDistance();
+
+    if (orig) {
+      refOrig.current?.setAddressText(orig.address);
+    }
+
+    if (dest) {
+      refDest.current?.setAddressText(dest.address);
+    }
   }, [orig, dest]);
 
   useEffect(() => {
@@ -59,6 +75,7 @@ const OrderRequest = ({ orig, setOrig, dest, setDest, userProfile, orderStatus }
   return (
     <View style={styles.container}>
       <GooglePlacesAutocomplete
+        ref={refOrig}
         styles={styles.inputStyles}
         textInputProps={{
           placeholderTextColor: "#5d5d5d",
@@ -70,8 +87,9 @@ const OrderRequest = ({ orig, setOrig, dest, setDest, userProfile, orderStatus }
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             },
+            address: data.description,
             shortAddress: details.name,
-            address: details.formatted_address,
+            fullAddress: details.formatted_address,
             postcode: details.address_components.slice(-1)[0].long_name,
           });
         }}
@@ -86,6 +104,7 @@ const OrderRequest = ({ orig, setOrig, dest, setDest, userProfile, orderStatus }
         }}
       />
       <GooglePlacesAutocomplete
+        ref={refDest}
         styles={styles.inputStyles}
         textInputProps={{
           placeholderTextColor: "#5d5d5d",
@@ -97,8 +116,9 @@ const OrderRequest = ({ orig, setOrig, dest, setDest, userProfile, orderStatus }
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             },
+            address: data.description,
             shortAddress: details.name,
-            address: details.formatted_address,
+            fullAddress: details.formatted_address,
             postcode: details.address_components.slice(-1)[0].long_name,
           });
         }}
