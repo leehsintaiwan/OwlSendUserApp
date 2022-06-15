@@ -1,8 +1,9 @@
 import { React, useEffect, useState, useRef } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { Button, Input, Text } from "react-native-elements";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Colors from "../core/Colors";
+import * as Location from "expo-location";
 import { db } from "../core/Config";
 import {
   doc,
@@ -12,6 +13,7 @@ import {
   GeoPoint,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 const OrderRequest = ({
   orig,
@@ -53,37 +55,84 @@ const OrderRequest = ({
     navigation.navigate("Finding");
   };
 
+  const getCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.Balanced,
+    });
+    if (location) {
+      const { latitude, longitude } = location.coords;
+      let response = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude,
+      });
+
+      let address = `${response[0].name}, ${response[0].street}, ${response[0].city}, ${response[0].postalCode}`;
+      refOrig.current?.setAddressText(address);
+
+      setOrig({
+        location: {
+          latitude: latitude,
+          longitude: longitude,
+        },
+        address: address,
+        shortAddress: response[0].name,
+        postcode: response[0].postalCode,
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <GooglePlacesAutocomplete
-        ref={refOrig}
-        styles={styles.inputStyles}
-        textInputProps={{
-          placeholderTextColor: "#5d5d5d",
-        }}
-        enablePoweredByContainer={false}
-        onPress={(data, details = null) => {
-          setOrig({
-            location: {
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-            },
-            address: data.description,
-            shortAddress: details.name,
-            fullAddress: details.formatted_address,
-            postcode: details.address_components.slice(-1)[0].long_name,
-          });
-        }}
-        fetchDetails={true}
-        returnKeyType={"search"}
-        placeholder="Pickup Address"
-        nearbyPlacesAPI="GooglePlacesSearch"
-        debounce={400}
-        query={{
-          key: "AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY",
-          language: "en",
-        }}
-      />
+      <View>
+        <GooglePlacesAutocomplete
+          ref={refOrig}
+          styles={styles.inputStyles}
+          textInputProps={{
+            placeholderTextColor: "#5d5d5d",
+          }}
+          enablePoweredByContainer={false}
+          onPress={(data, details = null) => {
+            setOrig({
+              location: {
+                latitude: details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
+              },
+              address: data.description,
+              shortAddress: details.name,
+              postcode: details.address_components.slice(-1)[0].long_name,
+            });
+          }}
+          fetchDetails={true}
+          returnKeyType={"search"}
+          placeholder="Pickup Address"
+          nearbyPlacesAPI="GooglePlacesSearch"
+          debounce={400}
+          query={{
+            key: "AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY",
+            language: "en",
+          }}
+        />
+        <View style={styles.locationContainer}>
+          <TouchableOpacity
+            style={styles.locationButton}
+            onPress={() => {
+              getCurrentLocation();
+            }}
+          >
+            <FontAwesome
+              name="location-arrow"
+              size={35}
+              color={Colors.primary}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
       <GooglePlacesAutocomplete
         ref={refDest}
         styles={styles.inputStyles}
@@ -99,7 +148,6 @@ const OrderRequest = ({
             },
             address: data.description,
             shortAddress: details.name,
-            fullAddress: details.formatted_address,
             postcode: details.address_components.slice(-1)[0].long_name,
           });
         }}
@@ -250,7 +298,8 @@ const styles = StyleSheet.create({
       backgroundColor: "whitesmoke",
       marginTop: 3,
       marginHorizontal: 6,
-      paddingHorizontal: 4,
+      paddingLeft: 4,
+      paddingRight: 40,
     },
     container: {
       flex: 0,
@@ -262,6 +311,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     flexGrow: 1,
+  },
+
+  locationButton: {},
+
+  locationContainer: {
+    // backgroundColor: "red",
+    position: "absolute",
+    right: 35,
+    top: 8,
   },
 
   price: {
