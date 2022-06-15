@@ -33,6 +33,8 @@ const HomeScreen = ({ navigation, userProfile, route }) => {
   const Form = () => {
     return (
       <OrderRequest
+        orig={orig}
+        dest={dest}
         setOrig={setOrig}
         setDest={setDest}
         userProfile={userProfile}

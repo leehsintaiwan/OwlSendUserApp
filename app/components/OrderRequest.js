@@ -13,15 +13,15 @@ import {
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
-const OrderRequest = ({ setOrig, setDest, userProfile, orderStatus }) => {
+const OrderRequest = ({ orig, setOrig, dest, setDest, userProfile, orderStatus }) => {
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
   const [length, setLength] = useState("");
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [distance, setDistance] = useState(2.6);
-  const [price, setPrice] = useState(7.0);
+  const [distance, setDistance] = useState(0.0);
+  const [price, setPrice] = useState(0.0);
 
   const navigation = useNavigation();
 
@@ -30,6 +30,27 @@ const OrderRequest = ({ setOrig, setDest, userProfile, orderStatus }) => {
       navigation.navigate("Status");
     }
   }, []);
+
+  useEffect(() => {
+    if (!orig || !dest) return;
+
+    const getDistance = async () => {
+      fetch(
+        `https://maps.googleapis.com/maps/api/distancematrix/json?
+        units=imperial&origins=${orig.address}&destinations=${dest.address}
+        &key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`
+      )
+      .then((res) => res.json())
+      .then((data) => {
+        setDistance(parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0]))
+      })
+    };
+    getDistance();
+  }, [orig, dest]);
+
+  useEffect(() => {
+    setPrice(distance*2);
+  }, [distance]);
 
   const handleSend = () => {
     navigation.navigate("Finding");
