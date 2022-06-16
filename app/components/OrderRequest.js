@@ -27,6 +27,7 @@ const OrderRequest = ({
   orderStatus,
   currentLocation,
   setShowSettings,
+  distance,
 }) => {
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
@@ -34,7 +35,6 @@ const OrderRequest = ({
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [distance, setDistance] = useState(0.0);
   const [price, setPrice] = useState(0.0);
   const refOrig = useRef();
   const refDest = useRef();
@@ -50,27 +50,6 @@ const OrderRequest = ({
       refDest.current?.setAddressText(dest.address);
     }
   }, []);
-
-  useEffect(() => {
-    if (!orig || !dest) return;
-
-    const getDistance = async () => {
-      fetch(
-        `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${
-          orig.address
-        }&destinations=${
-          dest.address
-        }&units=imperial&key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setDistance(
-            parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0])
-          );
-        });
-    };
-    getDistance();
-  }, [orig, dest]);
 
   useEffect(() => {
     setPrice(distance * PRICE_FACTOR);

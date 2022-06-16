@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  BackHandler,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FindingDrivers from "../components/FindingDrivers";
@@ -23,6 +24,7 @@ const HomeScreen = ({ navigation, userProfile }) => {
   const [orderStatus, setOrderStatus] = useState(null);
   const [orig, setOrig] = useState(null);
   const [dest, setDest] = useState(null);
+  const [distance, setDistance] = useState(0.0);
   const [currentLocation, setCurrentLocation] = useState({
     latitude: 51.498733, // This is the Geoloaction of Huxley!
     longitude: -0.179461, // Change to user's current location later on.
@@ -59,10 +61,35 @@ const HomeScreen = ({ navigation, userProfile }) => {
   }, [orderStatus]);
 
   useEffect(() => {
-    navigation.addListener("beforeRemove", () => {
-      return true;
-    });
-  }, [navigation]);
+    if (!orig || !dest) return;
+
+    const getDistance = async () => {
+      fetch(
+        `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${
+          orig?.address
+        }&destinations=${
+          dest?.address
+        }&units=imperial&key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setDistance(
+            parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0])
+          );
+        });
+    };
+    getDistance();
+  }, [orig, dest]);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        return true;
+      }
+    );
+    return () => backHandler.remove();
+  }, []);
 
   const Form = () => {
     return (
@@ -76,6 +103,7 @@ const HomeScreen = ({ navigation, userProfile }) => {
         orderStatus={orderStatus}
         currentLocation={currentLocation}
         setShowSettings={setShowSettings}
+        distance={distance}
       />
     );
   };
