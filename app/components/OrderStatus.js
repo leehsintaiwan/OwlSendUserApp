@@ -83,7 +83,7 @@ const OrderStatus = ({ navigation, orderStatus, setShowSettings }) => {
               buttonStyle={styles.buttonStyle}
               containerStyle={styles.buttonContainerStyle}
               titleStyle={styles.buttonTitleStyle}
-              onPress={() => navigation.navigate("Home", { screen: "Form" })}
+              onPress={() => navigation.navigate("Form")}
             />
           )}
         </View>

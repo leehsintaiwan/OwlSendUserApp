@@ -58,6 +58,12 @@ const HomeScreen = ({ navigation, userProfile }) => {
     }
   }, [orderStatus]);
 
+  useEffect(() => {
+    navigation.addListener("beforeRemove", () => {
+      return true;
+    });
+  }, [navigation]);
+
   const Form = () => {
     return (
       <OrderRequest
