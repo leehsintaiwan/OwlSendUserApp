@@ -94,9 +94,10 @@ const OrderRequest = ({
     unsubscribes.push(
       onSnapshot(q, (snapshot) => {
         snapshot.docChanges().forEach(async (change) => {
-          if (change.type === "added" || change.type === "modified") {
-            const driverPhone = change.doc.id;
-            console.log("Send Request to Driver: ", driverPhone);
+          const driverPhone = change.doc.id;
+          const requestedIds = requestedDrivers.map((driver) => driver.id);
+          if (change.type === "added" && !requestedIds.includes(driverPhone)) {
+            console.log("Sending Request to Driver: ", driverPhone);
 
             const newDoc = doc(db, "DriverOrders", driverPhone);
 
@@ -197,11 +198,9 @@ const OrderRequest = ({
   };
 
   const cleanupDrivers = () => {
-    console.log("Cleanup");
-
     requestedDrivers.forEach(async (driverRef) => {
       if (driverRef.id != acceptedDriver) {
-        console.log("Cancelling Request: ", driverRef.id);
+        console.log("Cancelling Driver Request: ", driverRef.id);
         try {
           await runTransaction(db, async (transaction) => {
             const driverDoc = await transaction.get(driverRef);
@@ -212,9 +211,12 @@ const OrderRequest = ({
               transaction.delete(driverRef);
             }
           });
-          console.log("Transaction successfully committed!");
+          console.log("Successfully canceled all other driver requests");
         } catch (e) {
-          console.log("Transaction failed: ", e);
+          console.log(
+            "Canceling all other driver requests. Transaction failed: ",
+            e
+          );
         }
       }
     });

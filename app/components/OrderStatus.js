@@ -9,7 +9,7 @@ import {
 import { Text, Button } from "react-native-elements";
 import Colors from "../core/Colors";
 import { db } from "../core/Config";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, runTransaction } from "firebase/firestore";
 
 const OrderStatus = ({
   navigation,
@@ -38,8 +38,21 @@ const OrderStatus = ({
     setDest(null);
     navigation.navigate("Form");
 
-    const orderDoc = doc(db, "UserOrders", userProfile.phone);
-    await deleteDoc(orderDoc);
+    try {
+      await runTransaction(db, async (transaction) => {
+        const orderRef = doc(db, "UserOrders", userProfile.phone);
+        const orderDoc = await transaction.get(orderRef);
+        if (
+          orderDoc.exists() &&
+          orderDoc.data().status === "Delivered" // Ensure it hasn't been overwritten by another user request
+        ) {
+          transaction.delete(orderRef);
+        }
+      });
+      console.log("Successfully deleted delivered user order");
+    } catch (e) {
+      console.log("Deleting delivered user order. Transaction failed: ", e);
+    }
   };
 
   return (
