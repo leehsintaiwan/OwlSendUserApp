@@ -8,8 +8,17 @@ import {
 } from "react-native";
 import { Text, Button } from "react-native-elements";
 import Colors from "../core/Colors";
+import { db } from "../core/Config";
+import { doc, deleteDoc } from "firebase/firestore";
 
-const OrderStatus = ({ navigation, orderStatus, setShowSettings }) => {
+const OrderStatus = ({
+  navigation,
+  orderStatus,
+  setShowSettings,
+  userProfile,
+  setOrig,
+  setDest,
+}) => {
   const [minutesLeft, setMinutesLeft] = useState(
     getMinutesLeft(orderStatus?.time.toDate())
   );
@@ -23,6 +32,15 @@ const OrderStatus = ({ navigation, orderStatus, setShowSettings }) => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const closeOrder = async () => {
+    setOrig(null);
+    setDest(null);
+    navigation.navigate("Form");
+
+    const orderDoc = doc(db, "UserOrders", userProfile.phone);
+    await deleteDoc(orderDoc);
+  };
 
   return (
     <View style={styles.container}>
@@ -83,7 +101,7 @@ const OrderStatus = ({ navigation, orderStatus, setShowSettings }) => {
               buttonStyle={styles.buttonStyle}
               containerStyle={styles.buttonContainerStyle}
               titleStyle={styles.buttonTitleStyle}
-              onPress={() => navigation.navigate("Form")}
+              onPress={closeOrder}
             />
           )}
         </View>

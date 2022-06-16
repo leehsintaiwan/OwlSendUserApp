@@ -1,5 +1,5 @@
 import { React, useEffect, useState, useRef } from "react";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import { Button, Input, Text } from "react-native-elements";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Colors from "../core/Colors";
@@ -11,11 +11,19 @@ import {
   updateDoc,
   setDoc,
   GeoPoint,
+  collection,
+  query,
+  where,
+  getDoc,
+  Timestamp,
+  runTransaction,
 } from "firebase/firestore";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 // Price = Distance in miles * PRICE_FACTOR
 const PRICE_FACTOR = 2;
+// Time out time for requesting drivers
+const TIME_OUT_SECONDS = 300;
 
 const OrderRequest = ({
   navigation,
@@ -24,7 +32,6 @@ const OrderRequest = ({
   setOrig,
   setDest,
   userProfile,
-  orderStatus,
   currentLocation,
   setShowSettings,
   distance,
@@ -38,6 +45,11 @@ const OrderRequest = ({
   const [price, setPrice] = useState(0.0);
   const refOrig = useRef();
   const refDest = useRef();
+
+  // Variables for requesting drivers
+  let acceptedDriver = null;
+  const unsubscribes = [];
+  const requestedDrivers = [];
 
   useEffect(() => {
     setShowSettings(true);
@@ -55,8 +67,161 @@ const OrderRequest = ({
     setPrice(distance * PRICE_FACTOR);
   }, [distance]);
 
+  // Search on Firebase for drivers to fulfill order
   const handleSend = () => {
     navigation.navigate("Finding");
+
+    requestDrivers();
+
+    waitForDrivers();
+
+    setTimeout(() => {
+      if (!acceptedDriver) {
+        cleanupDrivers();
+        navigation.navigate("Form");
+        Alert.alert("Sorry, unable to find drivers to fulfill your order.");
+      }
+    }, TIME_OUT_SECONDS * 1000);
+  };
+
+  const requestDrivers = () => {
+    const q = query(
+      collection(db, "RegisteredDrivers"),
+      where("online", "==", true),
+      where("available", "==", true)
+    );
+
+    unsubscribes.push(
+      onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach(async (change) => {
+          if (change.type === "added" || change.type === "modified") {
+            const driverPhone = change.doc.id;
+            console.log("Send Request to Driver: ", driverPhone);
+
+            const newDoc = doc(db, "DriverOrders", driverPhone);
+
+            const docData = {
+              userPhone: userProfile.phone,
+              status: "pending",
+              price: price,
+              pickup: {
+                type: "Pickup",
+                name: userProfile.firstName + " " + userProfile.lastName,
+                phone: userProfile.phone,
+                address: orig.address,
+                shortAddress: orig.shortAddress,
+                postcode: orig.postcode,
+                location: new GeoPoint(
+                  orig.location.latitude,
+                  orig.location.longitude
+                ),
+                // arriveBy:
+              },
+              dropoff: {
+                type: "Deliver",
+                name: recipientName,
+                phone: recipientTel,
+                address: dest.address,
+                shortAddress: dest.shortAddress,
+                postcode: dest.postcode,
+                location: new GeoPoint(
+                  dest.location.latitude,
+                  dest.location.longitude
+                ),
+                // arriveBy:
+              },
+            };
+
+            await setDoc(newDoc, docData);
+            requestedDrivers.push(newDoc);
+          }
+        });
+      })
+    );
+  };
+
+  const waitForDrivers = () => {
+    const q = query(
+      collection(db, "DriverOrders"),
+      where("status", "==", "accepted")
+    );
+
+    unsubscribes.push(
+      onSnapshot(q, (snapshot) => {
+        snapshot.docChanges().forEach(async (change) => {
+          if (change.type === "added") {
+            const driverPhone = change.doc.id;
+
+            // Update driver order status to pickup straight away for this week without chaining
+            const driverOrderDoc = doc(db, "DriverOrders", driverPhone);
+            await updateDoc(driverOrderDoc, { status: "pickup" });
+            acceptedDriver = driverOrderDoc.id;
+
+            // Get driver name from registered drivers
+            const driverDoc = doc(db, "RegisteredDrivers", driverPhone);
+            const driver = (await getDoc(driverDoc)).data();
+
+            console.log("Accepted by Driver: ", driverPhone, driver.name);
+
+            const newDoc = doc(db, "UserOrders", userProfile.phone);
+
+            const docData = {
+              status: "Picking Up",
+              time: Timestamp.fromMillis(Date.now() + 10 * 60 * 1000), // pickup in 10 mins
+              pickup: {
+                shortAddress: orig.shortAddress,
+                location: new GeoPoint(
+                  orig.location.latitude,
+                  orig.location.longitude
+                ),
+              },
+              dropoff: {
+                shortAddress: dest.shortAddress,
+                location: new GeoPoint(
+                  dest.location.latitude,
+                  dest.location.longitude
+                ),
+              },
+              driver: { name: driver.name, phone: driverPhone },
+            };
+
+            await setDoc(newDoc, docData);
+
+            navigation.navigate("Home", { screen: "Status" });
+            cleanupDrivers();
+            return;
+          }
+        });
+      })
+    );
+  };
+
+  const cleanupDrivers = () => {
+    console.log("Cleanup");
+
+    requestedDrivers.forEach(async (driverRef) => {
+      if (driverRef.id != acceptedDriver) {
+        console.log("Cancelling Request: ", driverRef.id);
+        try {
+          await runTransaction(db, async (transaction) => {
+            const driverDoc = await transaction.get(driverRef);
+            if (
+              driverDoc.exists() &&
+              driverDoc.data().userPhone === userProfile.phone // Ensure it hasn't been overwritten by another user request
+            ) {
+              transaction.delete(driverRef);
+            }
+          });
+          console.log("Transaction successfully committed!");
+        } catch (e) {
+          console.log("Transaction failed: ", e);
+        }
+      }
+    });
+
+    unsubscribes.forEach((unsub) => {
+      unsub();
+    });
   };
 
   const useCurrentLocation = async () => {

@@ -44,6 +44,24 @@ const HomeScreen = ({ navigation, userProfile }) => {
     setCurrentLocation(location.coords);
   };
 
+  const getDistance = async () => {
+    if (!orig || !dest) return setDistance(0.0);
+
+    fetch(
+      `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${
+        orig.address
+      }&destinations=${
+        dest.address
+      }&units=imperial&key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setDistance(
+          parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0])
+        );
+      });
+  };
+
   useEffect(() => {
     getCurrentLocation();
 
@@ -61,23 +79,6 @@ const HomeScreen = ({ navigation, userProfile }) => {
   }, [orderStatus]);
 
   useEffect(() => {
-    if (!orig || !dest) return;
-
-    const getDistance = async () => {
-      fetch(
-        `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${
-          orig?.address
-        }&destinations=${
-          dest?.address
-        }&units=imperial&key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setDistance(
-            parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0])
-          );
-        });
-    };
     getDistance();
   }, [orig, dest]);
 
@@ -100,7 +101,6 @@ const HomeScreen = ({ navigation, userProfile }) => {
         setOrig={setOrig}
         setDest={setDest}
         userProfile={userProfile}
-        orderStatus={orderStatus}
         currentLocation={currentLocation}
         setShowSettings={setShowSettings}
         distance={distance}
@@ -124,6 +124,9 @@ const HomeScreen = ({ navigation, userProfile }) => {
         navigation={navigation}
         orderStatus={orderStatus}
         setShowSettings={setShowSettings}
+        userProfile={userProfile}
+        setOrig={setOrig}
+        setDest={setDest}
       />
     );
   };

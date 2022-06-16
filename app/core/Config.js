@@ -41,7 +41,7 @@ export const db = getFirestore(app);
 //       bio: "Student",
 //     };
 
-//     updateDoc(myDoc, newDocData);
+//     await updateDoc(myDoc, newDocData);
 //   };
 
 //   const Delete = async () => {
