@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { Text, Button } from "react-native-elements";
 import Colors from "../core/Colors";
 
@@ -34,6 +40,18 @@ const OrderStatus = ({ navigation, orderStatus, setShowSettings }) => {
           <Text h2 style={[styles.allText, styles.driverName]}>
             {orderStatus?.driver.name}
           </Text>
+          <TouchableOpacity
+            style={styles.callButton}
+            onPress={() => {
+              Linking.openURL(`tel: ${orderStatus.driver.phone}`);
+            }}
+          >
+            <Text style={styles.callText}>CALL</Text>
+            <Image
+              source={require("../assets/phone.png")}
+              style={styles.callIcon}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.timeContainer}>
@@ -145,6 +163,34 @@ const styles = StyleSheet.create({
 
   buttonTitleStyle: { fontWeight: "500" },
 
+  callButton: {
+    backgroundColor: "white",
+    flexDirection: "row",
+    width: 90,
+    height: 27,
+    borderRadius: 12,
+    marginLeft: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0.5, height: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2.5,
+    elevation: 5,
+  },
+
+  callIcon: {
+    width: 22,
+    height: 22,
+    marginLeft: 6,
+  },
+
+  callText: {
+    fontWeight: "700",
+    fontSize: 16,
+  },
+
   container: {
     backgroundColor: "white",
   },
@@ -164,13 +210,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    // justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: "5%",
   },
 
   driverName: {
     color: "white",
     textAlign: "center",
-    top: "40%",
   },
 
   icon: {
