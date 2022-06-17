@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   },
 
   buttonContainerStyle: {
-    marginTop: 12,
+    // marginTop: 12,
     width: 200,
     borderRadius: 6,
   },
@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0.5, height: 1 },
     shadowOpacity: 0.8,
@@ -249,23 +248,18 @@ const styles = StyleSheet.create({
 
   driverName: {
     color: "white",
-    textAlign: "center",
   },
 
   icon: {
     width: 50,
     height: 50,
-    position: "absolute",
-    right: 15,
   },
 
   minutesContainer: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
+    flex: 1,
+    justifyContent: "space-evenly",
     alignItems: "center",
-    paddingTop: 25,
+    marginBottom: 20,
   },
 
   statusContainer: {
@@ -273,6 +267,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
   },
 
   timeContainer: {

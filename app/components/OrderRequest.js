@@ -282,7 +282,6 @@ const OrderRequest = ({
         />
         <View style={styles.locationContainer}>
           <TouchableOpacity
-            style={styles.locationButton}
             onPress={() => {
               useCurrentLocation();
             }}
@@ -484,8 +483,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexGrow: 1,
   },
-
-  locationButton: {},
 
   locationContainer: {
     position: "absolute",

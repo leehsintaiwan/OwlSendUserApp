@@ -57,7 +57,11 @@ const HomeScreen = ({ navigation, userProfile }) => {
       .then((res) => res.json())
       .then((data) => {
         setDistance(
-          parseFloat(data.rows[0].elements[0].distance.text.split(" ")[0])
+          parseFloat(
+            data.rows[0].elements[0].distance.text
+              .replace(",", "")
+              .split(" ")[0]
+          )
         );
       });
   };
@@ -75,6 +79,10 @@ const HomeScreen = ({ navigation, userProfile }) => {
       setOrig(orderStatus.pickup);
       setDest(orderStatus.dropoff);
       navigation.navigate("Home", { screen: "Status" });
+    } else {
+      setOrig(null);
+      setDest(null);
+      navigation.navigate("Home", { screen: "Form" });
     }
   }, [orderStatus]);
 
