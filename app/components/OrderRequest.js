@@ -19,6 +19,8 @@ import {
   runTransaction,
 } from "firebase/firestore";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import "intl";
+import "intl/locale-data/jsonp/en";
 
 // Price = Distance in miles * PRICE_FACTOR
 const PRICE_FACTOR = 2;
