@@ -112,7 +112,6 @@ const HomeScreen = ({ navigation, userProfile }) => {
     return (
       <FindingDrivers
         navigation={navigation}
-        orderStatus={orderStatus}
         setShowSettings={setShowSettings}
       />
     );

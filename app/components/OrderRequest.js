@@ -50,6 +50,7 @@ const OrderRequest = ({
   let acceptedDriver = null;
   const unsubscribes = [];
   const requestedDrivers = [];
+  let timer = null;
 
   useEffect(() => {
     setShowSettings(true);
@@ -69,18 +70,16 @@ const OrderRequest = ({
 
   // Search on Firebase for drivers to fulfill order
   const handleSend = () => {
-    navigation.navigate("Finding");
+    navigation.navigate("Finding", { cleanupDrivers });
 
     requestDrivers();
 
     waitForDrivers();
 
-    setTimeout(() => {
-      if (!acceptedDriver) {
-        cleanupDrivers();
-        navigation.navigate("Form");
-        Alert.alert("Sorry, unable to find drivers to fulfill your order.");
-      }
+    timer = setTimeout(() => {
+      cleanupDrivers();
+      navigation.navigate("Form");
+      Alert.alert("Sorry, unable to find drivers to fulfill your order.");
     }, TIME_OUT_SECONDS * 1000);
   };
 
@@ -198,6 +197,7 @@ const OrderRequest = ({
   };
 
   const cleanupDrivers = () => {
+    clearTimeout(timer);
     requestedDrivers.forEach(async (driverRef) => {
       if (driverRef.id != acceptedDriver) {
         console.log("Cancelling Driver Request: ", driverRef.id);
@@ -492,7 +492,6 @@ const styles = StyleSheet.create({
   },
 
   price: {
-    // backgroundColor: "red",
     width: "35%",
     textAlign: "right",
     fontWeight: "500",

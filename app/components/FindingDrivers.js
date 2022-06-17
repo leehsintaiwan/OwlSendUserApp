@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { Text } from "react-native-elements";
+import { Text, Button } from "react-native-elements";
 import Colors from "../core/Colors";
+import { useRoute } from "@react-navigation/native";
 
-const FindingDrivers = ({ navigation, orderStatus, setShowSettings }) => {
+const FindingDrivers = ({ navigation, setShowSettings }) => {
+  const route = useRoute();
+
   useEffect(() => {
     setShowSettings(false);
   }, []);
 
   return (
     <View style={styles.container}>
-      <View style={styles.statusContainer}>
-        <Image source={require("../assets/waiting.png")} style={styles.icon} />
-      </View>
       <View style={styles.textContainer}>
         <Text h2 style={[styles.text]}>
           Looking for Drivers
@@ -22,6 +22,17 @@ const FindingDrivers = ({ navigation, orderStatus, setShowSettings }) => {
         source={require("../assets/finding-drivers.gif")}
         style={styles.gif}
       />
+      <Button
+        title="Cancel"
+        raised={true}
+        buttonStyle={styles.buttonStyle}
+        containerStyle={styles.buttonContainerStyle}
+        titleStyle={styles.buttonTitleStyle}
+        onPress={() => {
+          route.params.cleanupDrivers();
+          navigation.navigate("Form");
+        }}
+      />
     </View>
   );
 };
@@ -29,6 +40,22 @@ const FindingDrivers = ({ navigation, orderStatus, setShowSettings }) => {
 export default FindingDrivers;
 
 const styles = StyleSheet.create({
+  buttonStyle: {
+    backgroundColor: Colors.dark,
+    borderRadius: 6,
+  },
+
+  buttonContainerStyle: {
+    marginTop: 8,
+    width: 200,
+    borderRadius: 6,
+    alignSelf: "center",
+  },
+
+  buttonTitleStyle: {
+    fontWeight: "500",
+  },
+
   container: {
     backgroundColor: "white",
     flex: 1,
@@ -36,19 +63,12 @@ const styles = StyleSheet.create({
 
   gif: {
     width: "100%",
-    height: "38%",
-  },
-
-  icon: {
-    width: 50,
-    height: 50,
-    position: "absolute",
-    right: 15,
+    height: "40%",
   },
 
   textContainer: {
     backgroundColor: Colors.primary,
-    height: "38%",
+    height: "40%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -58,10 +78,5 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
     fontWeight: "700",
-  },
-
-  statusContainer: {
-    height: "18%",
-    justifyContent: "center",
   },
 });
