@@ -388,7 +388,10 @@ const OrderRequest = ({
           {distance} mi
         </Text>
         <Text h1 numberOfLines={1} adjustsFontSizeToFit style={styles.price}>
-          £{price.toFixed(2)}
+          {new Intl.NumberFormat("en-UK", {
+            style: "currency",
+            currency: "GBP",
+          }).format(price)}
         </Text>
       </View>
       <Button
