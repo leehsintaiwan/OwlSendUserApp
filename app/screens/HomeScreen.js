@@ -1,15 +1,15 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as Location from "expo-location";
 import { doc, onSnapshot } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  BackHandler,
+  Keyboard,
+  KeyboardAvoidingView,
   StyleSheet,
   TouchableOpacity,
-  View,
-  KeyboardAvoidingView,
-  Keyboard,
   TouchableWithoutFeedback,
-  BackHandler,
+  View,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FindingDrivers from "../components/FindingDrivers";
@@ -57,11 +57,13 @@ const HomeScreen = ({ navigation, userProfile }) => {
       .then((res) => res.json())
       .then((data) => {
         setDistance(
-          parseFloat(
-            data.rows[0].elements[0].distance.text
-              .replace(",", "")
-              .split(" ")[0]
-          )
+          data.rows[0].elements[0].distance
+            ? parseFloat(
+                data.rows[0].elements[0].distance.text
+                  .replace(",", "")
+                  .split(" ")[0]
+              )
+            : "Unreachable"
         );
       });
   };
@@ -104,11 +106,11 @@ const HomeScreen = ({ navigation, userProfile }) => {
     return (
       <OrderRequest
         navigation={navigation}
+        userProfile={userProfile}
         orig={orig}
         dest={dest}
         setOrig={setOrig}
         setDest={setDest}
-        userProfile={userProfile}
         currentLocation={currentLocation}
         setShowSettings={setShowSettings}
         distance={distance}
@@ -120,6 +122,10 @@ const HomeScreen = ({ navigation, userProfile }) => {
     return (
       <FindingDrivers
         navigation={navigation}
+        userProfile={userProfile}
+        orig={orig}
+        dest={dest}
+        showSettings={showSettings}
         setShowSettings={setShowSettings}
       />
     );

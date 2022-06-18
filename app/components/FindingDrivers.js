@@ -1,15 +1,41 @@
 import { useEffect } from "react";
-import { Image, StyleSheet, View } from "react-native";
-import { Text, Button } from "react-native-elements";
+import { Alert, Image, StyleSheet, View } from "react-native";
+import { Button, Text } from "react-native-elements";
 import Colors from "../core/Colors";
-import { useRoute } from "@react-navigation/native";
+import { cleanupDrivers, waitForDrivers } from "../core/SearchingAlgorithm";
 
-const FindingDrivers = ({ navigation, setShowSettings }) => {
-  const route = useRoute();
+// Time out time for requesting drivers
+const TIME_OUT_SECONDS = 300;
+let timer = null;
 
+const FindingDrivers = ({
+  navigation,
+  userProfile,
+  orig,
+  dest,
+  showSettings,
+  setShowSettings,
+}) => {
   useEffect(() => {
     setShowSettings(false);
+
+    // So this doesn't execute twice after setShowSettings refreshes the screen
+    if (showSettings) {
+      timer = setTimeout(() => {
+        cleanupDrivers(userProfile);
+        navigation.navigate("Form");
+        Alert.alert("Sorry, unable to find drivers to fulfill your order.");
+      }, TIME_OUT_SECONDS * 1000);
+
+      waitForDrivers(userProfile, orig, dest, timer, navigation);
+    }
   }, []);
+
+  const handleCancel = () => {
+    clearTimeout(timer);
+    cleanupDrivers(userProfile);
+    navigation.navigate("Form");
+  };
 
   return (
     <View style={styles.container}>
@@ -28,10 +54,7 @@ const FindingDrivers = ({ navigation, setShowSettings }) => {
         buttonStyle={styles.buttonStyle}
         containerStyle={styles.buttonContainerStyle}
         titleStyle={styles.buttonTitleStyle}
-        onPress={() => {
-          route.params.cleanupDrivers();
-          navigation.navigate("Form");
-        }}
+        onPress={handleCancel}
       />
     </View>
   );
