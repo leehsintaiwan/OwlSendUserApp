@@ -243,6 +243,17 @@ const OrderRequest = ({
         containerStyle={styles.buttonContainer}
         buttonStyle={styles.buttonStyle}
         titleStyle={styles.buttonTitle}
+        disabled={
+          !orig ||
+          !dest ||
+          !recipientName ||
+          !recipientTel ||
+          !length ||
+          !width ||
+          !height ||
+          !weight ||
+          !price
+        }
       />
     </View>
   );

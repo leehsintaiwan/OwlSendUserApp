@@ -80,6 +80,7 @@ const RegisterScreen = ({ navigation, userProfile, setUserProfile }) => {
           containerStyle={styles.button}
           onPress={register}
           titleStyle={styles.buttonTitle}
+          disabled={!firstName || !lastName || !tel}
         />
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
