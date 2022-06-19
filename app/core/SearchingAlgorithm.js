@@ -130,7 +130,11 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
                 dest.location.longitude
               ),
             },
-            driver: { name: driver.name, phone: driverPhone },
+            driver: {
+              name: driver.name,
+              phone: driverPhone,
+              vehicle: driver.vehicle,
+            },
           };
 
           await setDoc(newDoc, docData);
