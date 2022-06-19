@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Image } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import Colors from "../core/Colors";
@@ -69,12 +69,8 @@ const Map = ({ orig, dest, currentLocation }) => {
           title="Pickup"
           description={orig.shortAddress}
           identifier="orig"
-        >
-          <Image
-            source={require("../assets/location.png")}
-            style={{ height: 25, width: 25 }}
-          />
-        </Marker>
+          image={require("../assets/location.png")}
+        />
       )}
       {dest && (
         <Marker
@@ -85,12 +81,8 @@ const Map = ({ orig, dest, currentLocation }) => {
           title="Dropoff"
           description={dest.shortAddress}
           identifier="dest"
-        >
-          <Image
-            source={require("../assets/destination.png")}
-            style={{ height: 25, width: 25 }}
-          />
-        </Marker>
+          image={require("../assets/destination.png")}
+        />
       )}
       {orig && dest && (
         <MapViewDirections
