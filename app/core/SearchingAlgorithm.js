@@ -45,13 +45,17 @@ export const findDrivers = (
       snapshot.docChanges().forEach(async (change) => {
         const driverPhone = change.doc.id;
         const requestedIds = requestedDrivers.map((driver) => driver.id);
+        driverLength = change.doc.data().dimensions.length;
+        driverWidth = change.doc.data().dimensions.width;
+        driverHeight = change.doc.data().dimensions.height;
+        driverWeight = change.doc.data().dimensions.weight;
         if (
           change.type === "added" &&
           !requestedIds.includes(driverPhone) &&
-          change.doc.data().dimensions.length >= dimensions[0] &&
-          change.doc.data().dimensions.width >= dimensions[1] &&
-          change.doc.data().dimensions.height >= dimensions[2] &&
-          change.doc.data().dimensions.weight >= weight
+          (isNaN(driverLength) || driverLength >= dimensions[0]) &&
+          (isNaN(driverWidth) || driverWidth >= dimensions[1]) &&
+          (isNaN(driverHeight) || driverHeight >= dimensions[2]) &&
+          (isNaN(driverWeight) || driverWeight >= weight)
         ) {
           console.log("Sending Request to Driver: ", driverPhone);
 
