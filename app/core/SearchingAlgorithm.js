@@ -31,6 +31,9 @@ export const findDrivers = (
   price,
   distance
 ) => {
+  const dimensions = [length, width, height];
+  dimensions.sort((a, b) => a - b).reverse();
+
   const q = query(
     collection(db, "RegisteredDrivers"),
     where("online", "==", true),
@@ -42,7 +45,14 @@ export const findDrivers = (
       snapshot.docChanges().forEach(async (change) => {
         const driverPhone = change.doc.id;
         const requestedIds = requestedDrivers.map((driver) => driver.id);
-        if (change.type === "added" && !requestedIds.includes(driverPhone)) {
+        if (
+          change.type === "added" &&
+          !requestedIds.includes(driverPhone) &&
+          change.doc.data().dimensions.length >= dimensions[0] &&
+          change.doc.data().dimensions.width >= dimensions[1] &&
+          change.doc.data().dimensions.height >= dimensions[2] &&
+          change.doc.data().dimensions.weight >= weight
+        ) {
           console.log("Sending Request to Driver: ", driverPhone);
 
           const newDoc = doc(db, "DriverOrders", driverPhone);

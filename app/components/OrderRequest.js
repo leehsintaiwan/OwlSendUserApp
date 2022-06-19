@@ -57,10 +57,10 @@ const OrderRequest = ({
       userProfile,
       recipientName,
       recipientTel,
-      length,
-      width,
-      height,
-      weight,
+      parseFloat(length),
+      parseFloat(width),
+      parseFloat(height),
+      parseFloat(weight),
       price,
       distance
     );
@@ -205,6 +205,7 @@ const OrderRequest = ({
           value={height}
           onChangeText={(text) => setHeight(text)}
           style={styles.dimensions}
+          errorMessage="Invalid"
         />
         <Input
           containerStyle={{ width: "25%", marginBottom: 0 }}
