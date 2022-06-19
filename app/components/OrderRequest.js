@@ -26,9 +26,13 @@ const OrderRequest = ({
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
   const [length, setLength] = useState("");
+  const [invalidLength, setInvalidLength] = useState(false);
   const [width, setWidth] = useState("");
+  const [invalidWidth, setInvalidWidth] = useState(false);
   const [height, setHeight] = useState("");
+  const [invalidHeight, setInvalidHeight] = useState(false);
   const [weight, setWeight] = useState("");
+  const [invalidWeight, setInvalidWeight] = useState(false);
   const [price, setPrice] = useState(0.0);
   const refOrig = useRef();
   const refDest = useRef();
@@ -187,33 +191,52 @@ const OrderRequest = ({
           placeholder="Length (cm)"
           keyboardType="numeric"
           value={length}
-          onChangeText={(text) => setLength(text)}
+          onChangeText={(text) => {
+            setLength(text);
+            setInvalidLength(isNaN(text));
+          }}
           style={styles.dimensions}
+          errorMessage={invalidLength && "Invalid"}
+          errorStyle={{ textAlign: "center" }}
         />
         <Input
           containerStyle={{ width: "25%", marginBottom: 0 }}
           placeholder="Width (cm)"
           keyboardType="numeric"
           value={width}
-          onChangeText={(text) => setWidth(text)}
+          onChangeText={(text) => {
+            setWidth(text);
+            setInvalidWidth(isNaN(text));
+          }}
           style={styles.dimensions}
+          errorMessage={invalidWidth && "Invalid"}
+          errorStyle={{ textAlign: "center" }}
         />
         <Input
           containerStyle={{ width: "25%", marginBottom: 0 }}
           placeholder="Height (cm)"
           keyboardType="numeric"
           value={height}
-          onChangeText={(text) => setHeight(text)}
+          onChangeText={(text) => {
+            setHeight(text);
+            setInvalidHeight(isNaN(text));
+          }}
           style={styles.dimensions}
-          errorMessage="Invalid"
+          errorMessage={invalidHeight && "Invalid"}
+          errorStyle={{ textAlign: "center" }}
         />
         <Input
           containerStyle={{ width: "25%", marginBottom: 0 }}
           placeholder="Weight (kg)"
           keyboardType="numeric"
           value={weight}
-          onChangeText={(text) => setWeight(text)}
+          onChangeText={(text) => {
+            setWeight(text);
+            setInvalidWeight(isNaN(text));
+          }}
           style={styles.dimensions}
+          errorMessage={invalidWeight && "Invalid"}
+          errorStyle={{ textAlign: "center" }}
         />
       </View>
       <View style={styles.infoContainer}>
@@ -253,7 +276,11 @@ const OrderRequest = ({
           !width ||
           !height ||
           !weight ||
-          !price
+          !price ||
+          invalidLength ||
+          invalidWidth ||
+          invalidHeight ||
+          invalidWeight
         }
       />
     </View>
