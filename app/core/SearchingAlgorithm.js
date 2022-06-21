@@ -107,6 +107,7 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
       snapshot.docChanges().forEach(async (change) => {
         if (change.type === "added" && !acceptedDriver) {
           const driverPhone = change.doc.id;
+          const driverOrder = change.doc.data();
 
           // Update driver order status to pickup straight away for this week without chaining
           const driverOrderDoc = doc(db, "DriverOrders", driverPhone);
@@ -123,9 +124,9 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
 
           const docData = {
             status: "Picking Up",
-            pickupTime: Timestamp.fromMillis(Date.now() + 10 * 60 * 1000), // pickup in 10 mins
+            pickupTime: driverOrder.pickup.arriveBy,
             handoffTime: Timestamp.fromMillis(Date.now() + 10 * 60 * 1000), // pickup in 10 mins
-            dropoffTime: Timestamp.fromMillis(Date.now() + 10 * 60 * 1000), // pickup in 10 mins
+            dropoffTime: driverOrder.dropoff.arriveBy, // pickup in 10 mins
             pickup: {
               shortAddress: orig.shortAddress,
               location: new GeoPoint(
@@ -144,10 +145,9 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
               name: driver.name,
               phone: driverPhone,
               vehicle: driver.vehicle,
-              location: driver.location,
             },
           };
-
+          console.log("ABC");
           await setDoc(newDoc, docData);
 
           clearTimeout(timer);

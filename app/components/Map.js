@@ -36,11 +36,19 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
   };
 
   useEffect(() => {
-    if (orderStatus?.status === "Picking Up" && orig) {
+    if (
+      orderStatus?.status === "Picking Up" &&
+      orderStatus?.driver.location &&
+      orig
+    ) {
       mapRef.current.fitToSuppliedMarkers(["driver", "orig"], {
         edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
       });
-    } else if (orderStatus?.status === "Delivering" && dest) {
+    } else if (
+      orderStatus?.status === "Delivering" &&
+      orderStatus?.driver.location &&
+      dest
+    ) {
       mapRef.current.fitToSuppliedMarkers(["driver", "dest"], {
         edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
       });
@@ -128,7 +136,7 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
           />
         </Marker>
       )}
-      {orderStatus && (
+      {orderStatus?.driver.location && (
         <Marker
           coordinate={{
             latitude: orderStatus.driver.location.latitude,
@@ -139,51 +147,60 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
           {getDriverVehicleImage()}
         </Marker>
       )}
-      {orig && dest && (!orderStatus || orderStatus?.status === "Delivered") && (
-        <MapViewDirections
-          origin={{
-            latitude: orig.location.latitude,
-            longitude: orig.location.longitude,
-          }}
-          destination={{
-            latitude: dest.location.latitude,
-            longitude: dest.location.longitude,
-          }}
-          apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
-          strokeWidth={3}
-          strokeColor={Colors.primary}
-        />
-      )}
-      {orig && dest && orderStatus?.status === "Picking Up" && (
-        <MapViewDirections
-          origin={{
-            latitude: orderStatus.driver.location.latitude,
-            longitude: orderStatus.driver.location.longitude,
-          }}
-          destination={{
-            latitude: orig.location.latitude,
-            longitude: orig.location.longitude,
-          }}
-          apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
-          strokeWidth={3}
-          strokeColor={Colors.dark}
-        />
-      )}
-      {orig && dest && orderStatus?.status === "Delivering" && (
-        <MapViewDirections
-          origin={{
-            latitude: orderStatus.driver.location.latitude,
-            longitude: orderStatus.driver.location.longitude,
-          }}
-          destination={{
-            latitude: dest.location.latitude,
-            longitude: dest.location.longitude,
-          }}
-          apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
-          strokeWidth={3}
-          strokeColor={Colors.primary}
-        />
-      )}
+      {orig &&
+        dest &&
+        (!orderStatus?.driver.location ||
+          orderStatus?.status === "Delivered") && (
+          <MapViewDirections
+            origin={{
+              latitude: orig.location.latitude,
+              longitude: orig.location.longitude,
+            }}
+            destination={{
+              latitude: dest.location.latitude,
+              longitude: dest.location.longitude,
+            }}
+            apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
+            strokeWidth={3}
+            strokeColor={Colors.primary}
+          />
+        )}
+      {orig &&
+        dest &&
+        orderStatus?.status === "Picking Up" &&
+        orderStatus?.driver.location && (
+          <MapViewDirections
+            origin={{
+              latitude: orderStatus.driver.location.latitude,
+              longitude: orderStatus.driver.location.longitude,
+            }}
+            destination={{
+              latitude: orig.location.latitude,
+              longitude: orig.location.longitude,
+            }}
+            apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
+            strokeWidth={3}
+            strokeColor={Colors.dark}
+          />
+        )}
+      {orig &&
+        dest &&
+        orderStatus?.status === "Delivering" &&
+        orderStatus?.driver.location && (
+          <MapViewDirections
+            origin={{
+              latitude: orderStatus.driver.location.latitude,
+              longitude: orderStatus.driver.location.longitude,
+            }}
+            destination={{
+              latitude: dest.location.latitude,
+              longitude: dest.location.longitude,
+            }}
+            apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
+            strokeWidth={3}
+            strokeColor={Colors.primary}
+          />
+        )}
     </MapView>
   );
 };
