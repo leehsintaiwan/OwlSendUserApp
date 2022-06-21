@@ -4,11 +4,47 @@ import MapView, { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import Colors from "../core/Colors";
 
-const Map = ({ orig, dest, currentLocation }) => {
+const Map = ({ orig, dest, currentLocation, orderStatus }) => {
   const mapRef = useRef(null);
 
+  const getDriverVehicleImage = () => {
+    switch (orderStatus.driver.vehicle) {
+      case 0:
+        return (
+          <Image
+            source={require("../assets/bicycle.png")}
+            style={{ height: 40, width: 40 }}
+          />
+        );
+
+      case 1:
+        return (
+          <Image
+            source={require("../assets/scooter.png")}
+            style={{ height: 40, width: 40 }}
+          />
+        );
+
+      case 2:
+        return (
+          <Image
+            source={require("../assets/van.png")}
+            style={{ height: 40, width: 40 }}
+          />
+        );
+    }
+  };
+
   useEffect(() => {
-    if (orig && dest) {
+    if (orderStatus?.status === "Picking Up" && orig) {
+      mapRef.current.fitToSuppliedMarkers(["driver", "orig"], {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+      });
+    } else if (orderStatus?.status === "Delivering" && dest) {
+      mapRef.current.fitToSuppliedMarkers(["driver", "dest"], {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+      });
+    } else if (orig && dest) {
       mapRef.current.fitToSuppliedMarkers(["orig", "dest"], {
         edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
       });
@@ -72,7 +108,7 @@ const Map = ({ orig, dest, currentLocation }) => {
         >
           <Image
             source={require("../assets/location.png")}
-            style={{ height: 25, width: 25 }}
+            style={{ height: 30, width: 30 }}
           />
         </Marker>
       )}
@@ -88,15 +124,56 @@ const Map = ({ orig, dest, currentLocation }) => {
         >
           <Image
             source={require("../assets/destination.png")}
-            style={{ height: 25, width: 25 }}
+            style={{ height: 30, width: 30 }}
           />
         </Marker>
       )}
-      {orig && dest && (
+      {orderStatus && (
+        <Marker
+          coordinate={{
+            latitude: orderStatus.driver.location.latitude,
+            longitude: orderStatus.driver.location.longitude,
+          }}
+          identifier="driver"
+        >
+          {getDriverVehicleImage()}
+        </Marker>
+      )}
+      {orig && dest && (!orderStatus || orderStatus?.status === "Delivered") && (
         <MapViewDirections
           origin={{
             latitude: orig.location.latitude,
             longitude: orig.location.longitude,
+          }}
+          destination={{
+            latitude: dest.location.latitude,
+            longitude: dest.location.longitude,
+          }}
+          apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
+          strokeWidth={3}
+          strokeColor={Colors.primary}
+        />
+      )}
+      {orig && dest && orderStatus?.status === "Picking Up" && (
+        <MapViewDirections
+          origin={{
+            latitude: orderStatus.driver.location.latitude,
+            longitude: orderStatus.driver.location.longitude,
+          }}
+          destination={{
+            latitude: orig.location.latitude,
+            longitude: orig.location.longitude,
+          }}
+          apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
+          strokeWidth={3}
+          strokeColor={Colors.dark}
+        />
+      )}
+      {orig && dest && orderStatus?.status === "Delivering" && (
+        <MapViewDirections
+          origin={{
+            latitude: orderStatus.driver.location.latitude,
+            longitude: orderStatus.driver.location.longitude,
           }}
           destination={{
             latitude: dest.location.latitude,

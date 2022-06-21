@@ -153,7 +153,12 @@ const HomeScreen = ({ navigation, userProfile }) => {
         style={styles.container}
       >
         <View style={{ flex: 0.55 }}>
-          <Map orig={orig} dest={dest} currentLocation={currentLocation} />
+          <Map
+            orig={orig}
+            dest={dest}
+            currentLocation={currentLocation}
+            orderStatus={orderStatus}
+          />
         </View>
         {showSettings && (
           <View style={styles.settingsIcon}>

@@ -129,7 +129,9 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
 
           const docData = {
             status: "Picking Up",
-            time: Timestamp.fromMillis(Date.now() + 10 * 60 * 1000), // pickup in 10 mins
+            pickupTime: Timestamp.fromMillis(Date.now() + 10 * 60 * 1000), // pickup in 10 mins
+            handoffTime: Timestamp.fromMillis(Date.now() + 10 * 60 * 1000), // pickup in 10 mins
+            dropoffTime: Timestamp.fromMillis(Date.now() + 10 * 60 * 1000), // pickup in 10 mins
             pickup: {
               shortAddress: orig.shortAddress,
               location: new GeoPoint(
@@ -148,6 +150,7 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
               name: driver.name,
               phone: driverPhone,
               vehicle: driver.vehicle,
+              location: driver.location,
             },
           };
 

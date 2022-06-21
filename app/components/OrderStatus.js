@@ -20,14 +20,24 @@ const OrderStatus = ({
   setDest,
 }) => {
   const [minutesLeft, setMinutesLeft] = useState(
-    getMinutesLeft(orderStatus?.time.toDate())
+    getMinutesLeft(
+      orderStatus?.status === "Picking Up"
+        ? orderStatus?.pickupTime.toDate()
+        : orderStatus?.dropoffTime.toDate()
+    )
   );
 
   useEffect(() => {
     setShowSettings(false);
 
     const interval = setInterval(() => {
-      setMinutesLeft(getMinutesLeft(orderStatus?.time.toDate()));
+      setMinutesLeft(
+        getMinutesLeft(
+          orderStatus?.status === "Picking Up"
+            ? orderStatus?.pickupTime.toDate()
+            : orderStatus?.dropoffTime.toDate()
+        )
+      );
     }, 1000);
 
     return () => clearInterval(interval);
@@ -92,8 +102,10 @@ const OrderStatus = ({
           </Text>
           <Text h2 style={[styles.allText, styles.time]}>
             {orderStatus?.status != "Delivered" &&
-              orderStatus?.time
-                .toDate()
+              (orderStatus?.status === "Picking Up"
+                ? orderStatus?.pickupTime.toDate()
+                : orderStatus?.dropoffTime.toDate()
+              )
                 .toLocaleTimeString("en-GB")
                 .substring(0, 5)}
           </Text>
@@ -101,7 +113,7 @@ const OrderStatus = ({
         <View style={styles.minutesContainer}>
           <Text h2 style={[styles.allText]}>
             {orderStatus?.status == "Delivered"
-              ? orderStatus?.time
+              ? orderStatus?.dropoffTime
                   .toDate()
                   .toLocaleTimeString("en-GB")
                   .substring(0, 5)
