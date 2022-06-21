@@ -101,10 +101,11 @@ const OrderStatus = ({
             {getTimeText(orderStatus?.status)}
           </Text>
           <Text h2 style={[styles.allText, styles.time]}>
-            {orderStatus?.status != "Delivered" &&
-              (orderStatus?.status === "Picking Up"
-                ? orderStatus?.pickupTime.toDate()
-                : orderStatus?.dropoffTime.toDate()
+            {orderStatus &&
+              orderStatus.status != "Delivered" &&
+              (orderStatus.status === "Picking Up"
+                ? orderStatus.pickupTime.toDate()
+                : orderStatus.dropoffTime.toDate()
               )
                 .toLocaleTimeString("en-GB")
                 .substring(0, 5)}
@@ -112,7 +113,7 @@ const OrderStatus = ({
         </View>
         <View style={styles.minutesContainer}>
           <Text h2 style={[styles.allText]}>
-            {orderStatus?.status == "Delivered"
+            {orderStatus?.status === "Delivered"
               ? orderStatus?.dropoffTime
                   .toDate()
                   .toLocaleTimeString("en-GB")

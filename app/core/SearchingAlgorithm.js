@@ -66,6 +66,7 @@ export const findDrivers = (
             status: "pending",
             price: price,
             distance: distance,
+            minutes: 10,
             pickup: {
               type: "Pickup",
               name: userProfile.firstName + " " + userProfile.lastName,
