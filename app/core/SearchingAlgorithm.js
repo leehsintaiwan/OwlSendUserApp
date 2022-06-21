@@ -13,82 +13,10 @@ import {
 } from "firebase/firestore";
 import { db } from "./Config";
 
-// Helper function to calculate distance and minutes between to geolocation points.
-export const getDistance = async (orig, dest) => {
-  let dist = 0;
-  let mins = 0;
-
-  if (orig && dest) {
-    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${
-      orig.latitude
-    },${orig.longitude}&destinations=${dest.latitude},${
-      dest.longitude
-    }&units=imperial&key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`;
-
-    const res = await fetch(url);
-
-    const data = await res.json();
-
-    dist = data.rows[0].elements[0].distance
-      ? parseFloat(
-          data.rows[0].elements[0].distance.text.replace(",", "").split(" ")[0]
-        )
-      : -1;
-
-    mins =
-      dist >= 0 ? Math.round(data.rows[0].elements[0].duration.value / 60) : -1;
-  }
-
-  return { dist, mins };
-};
-
 // Variables for requesting drivers
 let unsubscribes = [];
 let requestedDrivers = [];
 let acceptedDriver = null;
-
-const dimensionsAcceptable = (
-  driverDimensions,
-  length,
-  width,
-  height,
-  weight
-) => {
-  const parcelDimensions = [length, width, height];
-  parcelDimensions.sort((a, b) => a - b).reverse();
-
-  return (
-    (isNaN(driverDimensions.length) ||
-      driverDimensions.length >= parcelDimensions[0]) &&
-    (isNaN(driverDimensions.width) ||
-      driverDimensions.width >= parcelDimensions[1]) &&
-    (isNaN(driverDimensions.height) ||
-      driverDimensions.height >= parcelDimensions[2]) &&
-    (isNaN(driverDimensions.weight) || driverDimensions.weight >= weight)
-  );
-};
-
-const distanceAcceptable = async (driverData, orig, dest) => {
-  const baseLocation = driverData.showNearbyOrders
-    ? driverData.location
-    : driverData.centerAddress;
-
-  const { dist: distToPickup, mins: minsToPickup } = await getDistance(
-    baseLocation,
-    orig.location
-  );
-  const { dist: distToDest, mins: minsToDest } = await getDistance(
-    baseLocation,
-    dest.location
-  );
-
-  return (
-    0 <= distToPickup &&
-    distToPickup <= driverData.radius &&
-    0 <= distToDest &&
-    distToDest <= driverData.radius
-  );
-};
 
 export const findDrivers = (
   orig,
@@ -115,18 +43,7 @@ export const findDrivers = (
       snapshot.docChanges().forEach(async (change) => {
         const driverPhone = change.doc.id;
         const requestedIds = requestedDrivers.map((driver) => driver.id);
-        if (
-          change.type === "added" &&
-          !requestedIds.includes(driverPhone) &&
-          dimensionsAcceptable(
-            change.doc.data().dimensions,
-            length,
-            width,
-            height,
-            weight
-          ) &&
-          (await distanceAcceptable(change.doc.data(), orig, dest))
-        ) {
+        if (change.type === "added" && !requestedIds.includes(driverPhone)) {
           console.log("Sending Request to Driver: ", driverPhone);
 
           const newDoc = doc(db, "DriverOrders", driverPhone);
@@ -162,6 +79,12 @@ export const findDrivers = (
                 dest.location.longitude
               ),
               // arriveBy:
+            },
+            dimensions: {
+              length,
+              width,
+              height,
+              weight,
             },
           };
 
@@ -267,4 +190,33 @@ export const cleanupDrivers = (userProfile) => {
   unsubscribes = [];
   requestedDrivers = [];
   acceptedDriver = null;
+};
+
+// Helper function to calculate distance and minutes between to geolocation points.
+export const getDistance = async (orig, dest) => {
+  let dist = 0;
+  let mins = 0;
+
+  if (orig && dest) {
+    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${
+      orig.latitude
+    },${orig.longitude}&destinations=${dest.latitude},${
+      dest.longitude
+    }&units=imperial&key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`;
+
+    const res = await fetch(url);
+
+    const data = await res.json();
+
+    dist = data.rows[0].elements[0].distance
+      ? parseFloat(
+          data.rows[0].elements[0].distance.text.replace(",", "").split(" ")[0]
+        )
+      : -1;
+
+    mins =
+      dist >= 0 ? Math.round(data.rows[0].elements[0].duration.value / 60) : -1;
+  }
+
+  return { dist, mins };
 };
