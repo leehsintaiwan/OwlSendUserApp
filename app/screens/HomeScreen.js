@@ -67,7 +67,7 @@ const HomeScreen = ({ navigation, userProfile }) => {
             : "Unreachable"
         );
         setMinutes(
-          data.rows[0].elements[0].duration.value / 60
+          Math.round((data.rows[0].elements[0].duration.value) / 60)
         )
       });
   };
@@ -118,6 +118,7 @@ const HomeScreen = ({ navigation, userProfile }) => {
         currentLocation={currentLocation}
         setShowSettings={setShowSettings}
         distance={distance}
+        minutes={minutes}
       />
     );
   };
