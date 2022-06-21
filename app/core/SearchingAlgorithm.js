@@ -29,7 +29,8 @@ export const findDrivers = (
   height,
   weight,
   price,
-  distance
+  distance,
+  minutes
 ) => {
   const dimensions = [length, width, height];
   dimensions.sort((a, b) => a - b).reverse();
@@ -66,7 +67,7 @@ export const findDrivers = (
             status: "pending",
             price: price,
             distance: distance,
-            minutes: 10,
+            minutes: minutes,
             pickup: {
               type: "Pickup",
               name: userProfile.firstName + " " + userProfile.lastName,

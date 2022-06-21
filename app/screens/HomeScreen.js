@@ -25,6 +25,7 @@ const HomeScreen = ({ navigation, userProfile }) => {
   const [orig, setOrig] = useState(null);
   const [dest, setDest] = useState(null);
   const [distance, setDistance] = useState(0.0);
+  const [minutes, setMinutes] = useState(0);
   const [currentLocation, setCurrentLocation] = useState({
     latitude: 51.498733, // This is the Geoloaction of Huxley!
     longitude: -0.179461, // Change to user's current location later on.
@@ -65,6 +66,9 @@ const HomeScreen = ({ navigation, userProfile }) => {
               )
             : "Unreachable"
         );
+        setMinutes(
+          data.rows[0].elements[0].duration.value / 60
+        )
       });
   };
 

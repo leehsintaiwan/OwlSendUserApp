@@ -22,6 +22,7 @@ const OrderRequest = ({
   currentLocation,
   setShowSettings,
   distance,
+  minutes,
 }) => {
   const [recipientName, setRecipientName] = useState("");
   const [recipientTel, setRecipientTel] = useState("");
@@ -66,7 +67,8 @@ const OrderRequest = ({
       parseFloat(height),
       parseFloat(weight),
       price,
-      distance
+      distance,
+      minutes
     );
     navigation.navigate("Finding");
   };
