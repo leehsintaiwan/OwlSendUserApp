@@ -18,6 +18,7 @@ import OrderRequest from "../components/OrderRequest";
 import OrderStatus from "../components/OrderStatus";
 import Colors from "../core/Colors";
 import { db } from "../core/Config";
+import { getDistance } from "../core/SearchingAlgorithm";
 
 const HomeScreen = ({ navigation, userProfile }) => {
   const orderDoc = doc(db, "UserOrders", userProfile.phone);
@@ -45,33 +46,6 @@ const HomeScreen = ({ navigation, userProfile }) => {
     setCurrentLocation(location.coords);
   };
 
-  const getDistance = async () => {
-    if (!orig || !dest) return setDistance(0.0);
-
-    fetch(
-      `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${
-        orig.address
-      }&destinations=${
-        dest.address
-      }&units=imperial&key=${"AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setDistance(
-          data.rows[0].elements[0].distance
-            ? parseFloat(
-                data.rows[0].elements[0].distance.text
-                  .replace(",", "")
-                  .split(" ")[0]
-              )
-            : "Unreachable"
-        );
-        setMinutes(
-          Math.round((data.rows[0].elements[0].duration.value) / 60)
-        )
-      });
-  };
-
   useEffect(() => {
     getCurrentLocation();
 
@@ -93,7 +67,12 @@ const HomeScreen = ({ navigation, userProfile }) => {
   }, [orderStatus]);
 
   useEffect(() => {
-    getDistance();
+    const asyncDistance = async () => {
+      const { dist, mins } = await getDistance(orig?.location, dest?.location);
+      setDistance(dist);
+      setMinutes(mins);
+    };
+    asyncDistance();
   }, [orig, dest]);
 
   useEffect(() => {

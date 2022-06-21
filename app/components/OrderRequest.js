@@ -251,15 +251,15 @@ const OrderRequest = ({
           Distance:
         </Text>
         <Text h2 numberOfLines={1} adjustsFontSizeToFit style={styles.distance}>
-          {distance} {distance != "Unreachable" && "mi"}
+          {distance >= 0 ? distance : "Unreachable"} {distance >= 0 && "mi"}
         </Text>
         <Text h1 numberOfLines={1} adjustsFontSizeToFit style={styles.price}>
-          {isNaN(price)
-            ? "£ Not enough"
-            : new Intl.NumberFormat("en-UK", {
+          {price >= 0
+            ? new Intl.NumberFormat("en-UK", {
                 style: "currency",
                 currency: "GBP",
-              }).format(price)}
+              }).format(price)
+            : "£ Not enough"}
         </Text>
       </View>
       <Button
