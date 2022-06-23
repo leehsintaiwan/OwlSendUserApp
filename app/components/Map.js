@@ -113,7 +113,14 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
             latitude: orig.location.latitude,
             longitude: orig.location.longitude,
           }}
-          title="Pickup"
+          title={`Pickup ${
+            orderStatus
+              ? orderStatus.pickupTime
+                  .toDate()
+                  .toLocaleTimeString("en-GB")
+                  .substring(0, 5)
+              : ""
+          }`}
           description={orig.shortAddress}
           identifier="orig"
         >
@@ -129,7 +136,14 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
             latitude: dest.location.latitude,
             longitude: dest.location.longitude,
           }}
-          title="Dropoff"
+          title={`Dropoff ${
+            orderStatus
+              ? orderStatus.dropoffTime
+                  .toDate()
+                  .toLocaleTimeString("en-GB")
+                  .substring(0, 5)
+              : ""
+          }`}
           description={dest.shortAddress}
           identifier="dest"
         >
@@ -145,7 +159,14 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
             latitude: orderStatus.handoff.location.latitude,
             longitude: orderStatus.handoff.location.longitude,
           }}
-          title="Handoff"
+          title={`Handoff ${
+            orderStatus
+              ? orderStatus.handoffTime
+                  .toDate()
+                  .toLocaleTimeString("en-GB")
+                  .substring(0, 5)
+              : ""
+          }`}
           description={orderStatus.handoff.shortAddress}
           identifier="handoff"
         >
@@ -161,6 +182,8 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
             latitude: orderStatus.driver.location.latitude,
             longitude: orderStatus.driver.location.longitude,
           }}
+          title={"Driver"}
+          description={orderStatus.driver.name}
           identifier="driver"
         >
           {getDriverVehicleImage()}
