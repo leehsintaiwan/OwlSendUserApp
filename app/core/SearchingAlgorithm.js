@@ -219,15 +219,11 @@ const acceptFull = async (orig, dest, userProfile) => {
 };
 
 const acceptHandoff = async (orig, dest, userProfile) => {
-  const handoffTime = Math.max(
-    acceptedDriverHandoff1.dropoff.arriveBy,
+  const handoffTime =
+    acceptedDriverHandoff1.dropoff.arriveBy >
     acceptedDriverHandoff2.pickup.arriveBy
-  );
-  console.log(
-    acceptedDriverHandoff1.dropoff.arriveBy,
-    acceptedDriverHandoff2.pickup.arriveBy,
-    handoffTime
-  );
+      ? acceptedDriverHandoff1.dropoff.arriveBy
+      : acceptedDriverHandoff2.pickup.arriveBy;
 
   // Update driver order status to pickup and update handoff info
   const handoff1DriverOrderDoc = doc(
