@@ -377,8 +377,10 @@ export const cleanupAllDrivers = (userProfile) => {
   requestedDriversAll.forEach(async (driverRef) => {
     if (
       driverRef.id != acceptedDriverFull?.phone &&
-      driverRef.id != acceptedDriverHandoff1?.phone &&
-      driverRef.id != acceptedDriverHandoff2?.phone
+      (!acceptedDriverHandoff1 ||
+        !acceptedDriverHandoff2 ||
+        (driverRef.id != acceptedDriverHandoff1?.phone &&
+          driverRef.id != acceptedDriverHandoff2?.phone))
     ) {
       console.log("Cancelling Driver Request: ", driverRef.id);
       try {
