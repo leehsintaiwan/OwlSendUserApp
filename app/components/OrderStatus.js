@@ -108,7 +108,7 @@ const OrderStatus = ({
                 : orderStatus.dropoffTime.toDate()
               )
                 .toLocaleTimeString("en-GB")
-                .substring(0, 4)}
+                .substring(0, 5)}
           </Text>
         </View>
         <View style={styles.minutesContainer}>
@@ -117,7 +117,7 @@ const OrderStatus = ({
               ? orderStatus?.dropoffTime
                   .toDate()
                   .toLocaleTimeString("en-GB")
-                  .substring(0, 4)
+                  .substring(0, 5)
               : `In ${minutesLeft} mins`}
           </Text>
           {orderStatus?.status == "Delivered" && (
