@@ -49,9 +49,12 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
       orderStatus?.driver.location &&
       dest
     ) {
-      mapRef.current.fitToSuppliedMarkers(["driver", "dest"], {
-        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-      });
+      mapRef.current.fitToSuppliedMarkers(
+        ["driver", "dest", orderStatus?.handoffed === false && "handoff"],
+        {
+          edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        }
+      );
     } else if (orig && dest) {
       mapRef.current.fitToSuppliedMarkers(["orig", "dest"], {
         edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
@@ -136,6 +139,22 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
           />
         </Marker>
       )}
+      {orderStatus?.handoffTime && (
+        <Marker
+          coordinate={{
+            latitude: orderStatus.handoff.location.latitude,
+            longitude: orderStatus.handoff.location.longitude,
+          }}
+          title="Handoff"
+          description={orderStatus.handoff.shortAddress}
+          identifier="handoff"
+        >
+          <Image
+            source={require("../assets/relay.png")}
+            style={{ height: 30, width: 30 }}
+          />
+        </Marker>
+      )}
       {orderStatus?.driver.location && orderStatus?.status != "Delivered" && (
         <Marker
           coordinate={{
@@ -150,7 +169,8 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
       {orig &&
         dest &&
         (!orderStatus?.driver.location ||
-          orderStatus?.status === "Delivered") && (
+          orderStatus?.status === "Delivered") &&
+        !orderStatus?.handoffed && (
           <MapViewDirections
             origin={{
               latitude: orig.location.latitude,
@@ -186,11 +206,88 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
       {orig &&
         dest &&
         orderStatus?.status === "Delivering" &&
-        orderStatus?.driver.location && (
+        orderStatus?.driver.location &&
+        orderStatus?.handoffed != false && (
           <MapViewDirections
             origin={{
               latitude: orderStatus.driver.location.latitude,
               longitude: orderStatus.driver.location.longitude,
+            }}
+            destination={{
+              latitude: dest.location.latitude,
+              longitude: dest.location.longitude,
+            }}
+            apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
+            strokeWidth={3}
+            strokeColor={Colors.primary}
+          />
+        )}
+      {orig &&
+        dest &&
+        orderStatus?.status === "Delivering" &&
+        orderStatus?.driver.location &&
+        orderStatus?.handoffed === false && (
+          <MapViewDirections
+            origin={{
+              latitude: orderStatus.driver.location.latitude,
+              longitude: orderStatus.driver.location.longitude,
+            }}
+            destination={{
+              latitude: orderStatus.handoff.location.latitude,
+              longitude: orderStatus.handoff.location.longitude,
+            }}
+            apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
+            strokeWidth={3}
+            strokeColor={Colors.primary}
+          />
+        )}
+      {orig &&
+        dest &&
+        orderStatus?.status === "Delivering" &&
+        orderStatus?.driver.location &&
+        orderStatus?.handoffed === false && (
+          <MapViewDirections
+            origin={{
+              latitude: orderStatus.handoff.location.latitude,
+              longitude: orderStatus.handoff.location.longitude,
+            }}
+            destination={{
+              latitude: dest.location.latitude,
+              longitude: dest.location.longitude,
+            }}
+            apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
+            strokeWidth={3}
+            strokeColor={Colors.primary}
+          />
+        )}
+      {orig &&
+        dest &&
+        (!orderStatus?.driver.location ||
+          orderStatus?.status === "Delivered") &&
+        orderStatus?.handoffed && (
+          <MapViewDirections
+            origin={{
+              latitude: orig.location.latitude,
+              longitude: orig.location.longitude,
+            }}
+            destination={{
+              latitude: orderStatus.handoff.location.latitude,
+              longitude: orderStatus.handoff.location.longitude,
+            }}
+            apikey="AIzaSyCE2Ct-iHuI_2nNALaRghtfpNBj1gPhfcY"
+            strokeWidth={3}
+            strokeColor={Colors.primary}
+          />
+        )}
+      {orig &&
+        dest &&
+        (!orderStatus?.driver.location ||
+          orderStatus?.status === "Delivered") &&
+        orderStatus?.handoffed && (
+          <MapViewDirections
+            origin={{
+              latitude: orderStatus.handoff.location.latitude,
+              longitude: orderStatus.handoff.location.longitude,
             }}
             destination={{
               latitude: dest.location.latitude,

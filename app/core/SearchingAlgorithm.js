@@ -258,6 +258,7 @@ const acceptHandoff = async (orig, dest, userProfile) => {
     pickupTime: acceptedDriverHandoff1.pickup.arriveBy,
     handoffTime: handoffTime,
     dropoffTime: acceptedDriverHandoff2.dropoff.arriveBy,
+    handoffed: false,
     pickup: {
       shortAddress: orig.shortAddress,
       location: new GeoPoint(orig.location.latitude, orig.location.longitude),
