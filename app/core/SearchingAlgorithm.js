@@ -192,7 +192,10 @@ export const findDrivers = async (
 const acceptFull = async (orig, dest, userProfile) => {
   // Update driver order status to pickup
   const driverOrderDoc = doc(db, "DriverOrders", acceptedDriverFull.phone);
-  await updateDoc(driverOrderDoc, { status: "pickup" });
+  await updateDoc(driverOrderDoc, {
+    status: "pickup",
+    "dropoff.code": "01234", // Temprorarily set to this, find a way to send text to recipient later
+  });
 
   // Create new user order for user to display
   const newUserOrder = doc(db, "UserOrders", userProfile.phone);
@@ -225,6 +228,11 @@ const acceptHandoff = async (orig, dest, userProfile) => {
       ? acceptedDriverHandoff1.dropoff.arriveBy
       : acceptedDriverHandoff2.pickup.arriveBy;
 
+  const handoffCode = String(Math.floor(Math.random() * 100000)).padStart(
+    5,
+    "0"
+  );
+
   // Update driver order status to pickup and update handoff info
   const handoff1DriverOrderDoc = doc(
     db,
@@ -236,6 +244,7 @@ const acceptHandoff = async (orig, dest, userProfile) => {
     "dropoff.name": acceptedDriverHandoff2.name,
     "dropoff.phone": acceptedDriverHandoff2.phone,
     "dropoff.arriveBy": handoffTime,
+    "dropoff.code": handoffCode,
   });
 
   // Update other driver order status to pickup and update handoff info
@@ -249,6 +258,8 @@ const acceptHandoff = async (orig, dest, userProfile) => {
     "pickup.name": acceptedDriverHandoff1.name,
     "pickup.phone": acceptedDriverHandoff1.phone,
     "pickup.arriveBy": handoffTime,
+    "pickup.code": handoffCode,
+    "dropoff.code": "01234", // Temprorarily set to this, find a way to send text to recipient later
   });
 
   // Create new user order for user to display
