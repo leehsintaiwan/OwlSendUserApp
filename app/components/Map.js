@@ -136,7 +136,7 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
           />
         </Marker>
       )}
-      {orderStatus?.driver.location && (
+      {orderStatus?.driver.location && orderStatus?.status != "Delivered" && (
         <Marker
           coordinate={{
             latitude: orderStatus.driver.location.latitude,

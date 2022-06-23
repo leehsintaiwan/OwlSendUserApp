@@ -1,4 +1,3 @@
-import * as Location from "expo-location";
 import "intl";
 import "intl/locale-data/jsonp/en";
 import { useEffect, useRef, useState } from "react";
@@ -7,7 +6,7 @@ import { Button, Input, Text } from "react-native-elements";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Colors from "../core/Colors";
-import { findDrivers } from "../core/SearchingAlgorithm";
+import { findDrivers, geoToAddress } from "../core/SearchingAlgorithm";
 
 // Price = Distance in miles * PRICE_FACTOR
 const PRICE_FACTOR = 2;
@@ -73,27 +72,6 @@ const OrderRequest = ({
     navigation.navigate("Finding");
   };
 
-  const useCurrentLocation = async () => {
-    const { latitude, longitude } = currentLocation;
-    let response = await Location.reverseGeocodeAsync({
-      latitude,
-      longitude,
-    });
-
-    let address = `${response[0].name}, ${response[0].street}, ${response[0].city}, ${response[0].postalCode}`;
-    refOrig.current?.setAddressText(address);
-
-    setOrig({
-      location: {
-        latitude,
-        longitude,
-      },
-      address: address,
-      shortAddress: response[0].name,
-      postcode: response[0].postalCode,
-    });
-  };
-
   return (
     <View style={styles.container}>
       <View>
@@ -127,8 +105,10 @@ const OrderRequest = ({
         />
         <View style={styles.locationContainer}>
           <TouchableOpacity
-            onPress={() => {
-              useCurrentLocation();
+            onPress={async () => {
+              const res = await geoToAddress(currentLocation);
+              refOrig.current?.setAddressText(res.address);
+              setOrig(res);
             }}
           >
             <FontAwesome

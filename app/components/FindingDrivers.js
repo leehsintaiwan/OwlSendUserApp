@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Alert, Image, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-elements";
 import Colors from "../core/Colors";
-import { cleanupDrivers, waitForDrivers } from "../core/SearchingAlgorithm";
+import { cleanupAllDrivers, waitForDrivers } from "../core/SearchingAlgorithm";
 
 // Time out time for requesting drivers
 const TIME_OUT_SECONDS = 300;
@@ -22,7 +22,7 @@ const FindingDrivers = ({
     // So this doesn't execute twice after setShowSettings refreshes the screen
     if (showSettings) {
       timer = setTimeout(() => {
-        cleanupDrivers(userProfile);
+        cleanupAllDrivers(userProfile);
         navigation.navigate("Form");
         Alert.alert("Sorry, unable to find drivers to fulfill your order.");
       }, TIME_OUT_SECONDS * 1000);
@@ -33,7 +33,7 @@ const FindingDrivers = ({
 
   const handleCancel = () => {
     clearTimeout(timer);
-    cleanupDrivers(userProfile);
+    cleanupAllDrivers(userProfile);
     navigation.navigate("Form");
   };
 

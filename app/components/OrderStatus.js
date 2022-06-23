@@ -59,9 +59,9 @@ const OrderStatus = ({
           transaction.delete(orderRef);
         }
       });
-      console.log("Successfully deleted delivered user order");
+      console.log("Successfully deleted completed user order");
     } catch (e) {
-      console.log("Deleting delivered user order. Transaction failed: ", e);
+      console.log("Deleting completed user order. Transaction failed: ", e);
     }
   };
 
@@ -108,7 +108,7 @@ const OrderStatus = ({
                 : orderStatus.dropoffTime.toDate()
               )
                 .toLocaleTimeString("en-GB")
-                .substring(0, 5)}
+                .substring(0, 4)}
           </Text>
         </View>
         <View style={styles.minutesContainer}>
@@ -117,7 +117,7 @@ const OrderStatus = ({
               ? orderStatus?.dropoffTime
                   .toDate()
                   .toLocaleTimeString("en-GB")
-                  .substring(0, 5)
+                  .substring(0, 4)
               : `In ${minutesLeft} mins`}
           </Text>
           {orderStatus?.status == "Delivered" && (
