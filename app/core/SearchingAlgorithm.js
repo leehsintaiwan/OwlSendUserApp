@@ -170,15 +170,21 @@ export const findDrivers = async (
         );
         const newDriverOrder = doc(db, "DriverOrders", driverPhone);
         if (change.type === "added") {
-          if (!requestedIdsFull.includes(driverPhone)) {
+          if (!acceptedDriverFull && !requestedIdsFull.includes(driverPhone)) {
             console.log("Sending Full Request to Driver: ", driverPhone);
             await setDoc(newDriverOrder, driverOrderFull);
             requestedDriversAll.push(newDriverOrder);
-          } else if (!requestedIdsHandoff1.includes(driverPhone)) {
+          } else if (
+            !acceptedDriverHandoff1 &&
+            !requestedIdsHandoff1.includes(driverPhone)
+          ) {
             console.log("Sending Handoff1 Request to Driver: ", driverPhone);
             await setDoc(newDriverOrder, driverOrderHandoff1);
             requestedDriversHandoff1.push(newDriverOrder);
-          } else if (!requestedIdsHandoff2.includes(driverPhone)) {
+          } else if (
+            !acceptedDriverHandoff2 &&
+            !requestedIdsHandoff2.includes(driverPhone)
+          ) {
             console.log("Sending Handoff2 Request to Driver: ", driverPhone);
             await setDoc(newDriverOrder, driverOrderHandoff2);
             requestedDriversHandoff2.push(newDriverOrder);
@@ -374,6 +380,10 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
 };
 
 export const cleanupAllDrivers = (userProfile) => {
+  unsubscribes.forEach((unsub) => {
+    unsub();
+  });
+
   requestedDriversAll.forEach(async (driverRef) => {
     if (
       driverRef.id != acceptedDriverFull?.phone &&
@@ -402,10 +412,6 @@ export const cleanupAllDrivers = (userProfile) => {
     }
   });
   console.log("Successfully cancelled all other driver requests");
-
-  unsubscribes.forEach((unsub) => {
-    unsub();
-  });
 
   unsubscribes = [];
   requestedDriversAll = [];
