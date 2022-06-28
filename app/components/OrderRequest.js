@@ -69,7 +69,7 @@ const OrderRequest = ({
       distance,
       minutes
     );
-    navigation.navigate("Finding");
+    navigation.navigate("Finding", { recipientName, recipientTel });
   };
 
   return (

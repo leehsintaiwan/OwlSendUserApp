@@ -3,6 +3,7 @@ import { Image } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import Colors from "../core/Colors";
+import { formatTime } from "../core/SearchingAlgorithm";
 
 const Map = ({ orig, dest, currentLocation, orderStatus }) => {
   const mapRef = useRef(null);
@@ -114,12 +115,7 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
             longitude: orig.location.longitude,
           }}
           title={`Pickup ${
-            orderStatus
-              ? orderStatus.pickupTime
-                  .toDate()
-                  .toLocaleTimeString("en-GB")
-                  .substring(0, 5)
-              : ""
+            orderStatus ? formatTime(orderStatus.pickupTime) : ""
           }`}
           description={orig.shortAddress}
           identifier="orig"
@@ -137,12 +133,7 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
             longitude: dest.location.longitude,
           }}
           title={`Dropoff ${
-            orderStatus
-              ? orderStatus.dropoffTime
-                  .toDate()
-                  .toLocaleTimeString("en-GB")
-                  .substring(0, 5)
-              : ""
+            orderStatus ? formatTime(orderStatus.dropoffTime) : ""
           }`}
           description={dest.shortAddress}
           identifier="dest"
@@ -160,12 +151,7 @@ const Map = ({ orig, dest, currentLocation, orderStatus }) => {
             longitude: orderStatus.handoff.location.longitude,
           }}
           title={`Handoff ${
-            orderStatus
-              ? orderStatus.handoffTime
-                  .toDate()
-                  .toLocaleTimeString("en-GB")
-                  .substring(0, 5)
-              : ""
+            orderStatus ? formatTime(orderStatus.handoffTime) : ""
           }`}
           description={orderStatus.handoff.shortAddress}
           identifier="handoff"

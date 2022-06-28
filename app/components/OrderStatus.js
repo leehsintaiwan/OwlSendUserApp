@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { doc, runTransaction } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import {
   Image,
-  StyleSheet,
-  View,
-  TouchableOpacity,
   Linking,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Text, Button } from "react-native-elements";
+import { Button, Text } from "react-native-elements";
 import Colors from "../core/Colors";
 import { db } from "../core/Config";
-import { doc, runTransaction } from "firebase/firestore";
+import { formatTime } from "../core/SearchingAlgorithm";
 
 const OrderStatus = ({
   navigation,
@@ -104,20 +105,14 @@ const OrderStatus = ({
             {orderStatus &&
               orderStatus.status != "Delivered" &&
               (orderStatus.status === "Picking Up"
-                ? orderStatus.pickupTime.toDate()
-                : orderStatus.dropoffTime.toDate()
-              )
-                .toLocaleTimeString("en-GB")
-                .substring(0, 5)}
+                ? formatTime(orderStatus.pickupTime)
+                : formatTime(orderStatus.dropoffTime))}
           </Text>
         </View>
         <View style={styles.minutesContainer}>
           <Text h2 style={[styles.allText]}>
             {orderStatus?.status === "Delivered"
-              ? orderStatus?.dropoffTime
-                  .toDate()
-                  .toLocaleTimeString("en-GB")
-                  .substring(0, 5)
+              ? formatTime(orderStatus.dropoffTime)
               : `In ${minutesLeft} mins`}
           </Text>
           {orderStatus?.status == "Delivered" && (

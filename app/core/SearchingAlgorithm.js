@@ -10,6 +10,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { Linking, Platform } from "react-native";
 import { db } from "./Config";
 
 // Variables for requesting drivers
@@ -196,11 +197,16 @@ export const findDrivers = async (
 };
 
 const acceptFull = async (orig, dest, userProfile) => {
+  const deliveryCode = String(Math.floor(Math.random() * 100000)).padStart(
+    5,
+    "0"
+  );
+
   // Update driver order status to pickup
   const driverOrderDoc = doc(db, "DriverOrders", acceptedDriverFull.phone);
   await updateDoc(driverOrderDoc, {
     status: "pickup",
-    "dropoff.code": "01234", // Temprorarily set to this, find a way to send text to recipient later
+    "dropoff.code": deliveryCode,
   });
 
   // Create new user order for user to display
@@ -225,9 +231,19 @@ const acceptFull = async (orig, dest, userProfile) => {
     },
   };
   await setDoc(newUserOrder, userOrder);
+
+  return {
+    time: formatTime(acceptedDriverFull.dropoff.arriveBy),
+    code: deliveryCode,
+  };
 };
 
 const acceptHandoff = async (orig, dest, userProfile) => {
+  const deliveryCode = String(Math.floor(Math.random() * 100000)).padStart(
+    5,
+    "0"
+  );
+
   const handoffTime =
     acceptedDriverHandoff1.dropoff.arriveBy >
     acceptedDriverHandoff2.pickup.arriveBy
@@ -265,7 +281,7 @@ const acceptHandoff = async (orig, dest, userProfile) => {
     "pickup.phone": acceptedDriverHandoff1.phone,
     "pickup.arriveBy": handoffTime,
     "pickup.code": handoffCode,
-    "dropoff.code": "01234", // Temprorarily set to this, find a way to send text to recipient later
+    "dropoff.code": deliveryCode,
   });
 
   // Create new user order for user to display
@@ -296,9 +312,22 @@ const acceptHandoff = async (orig, dest, userProfile) => {
     },
   };
   await setDoc(newUserOrder, userOrder);
+
+  return {
+    time: formatTime(handoffTime),
+    code: deliveryCode,
+  };
 };
 
-export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
+export const waitForDrivers = (
+  userProfile,
+  orig,
+  dest,
+  timer,
+  navigation,
+  recipientName,
+  recipientTel
+) => {
   const q = query(
     collection(db, "DriverOrders"),
     where("status", "==", "accepted"),
@@ -329,9 +358,17 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
 
             // Cleanup all drivers
             clearTimeout(timer);
-            await acceptFull(orig, dest, userProfile);
+            const { time, code } = await acceptFull(orig, dest, userProfile);
             cleanupAllDrivers(userProfile);
             navigation.navigate("Home", { screen: "Status" });
+            sendText(
+              recipientTel,
+              recipientName,
+              userProfile.firstName + " " + userProfile.lastName,
+              time,
+              dest.address,
+              code
+            );
           } else if (
             driverOrder.pickup.type === "Pickup" &&
             driverOrder.dropoff.type === "Handoff"
@@ -346,9 +383,21 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
             // Cleanup handoff1 drivers
             if (acceptedDriverHandoff2) {
               clearTimeout(timer);
-              await acceptHandoff(orig, dest, userProfile);
+              const { time, code } = await acceptHandoff(
+                orig,
+                dest,
+                userProfile
+              );
               cleanupAllDrivers(userProfile);
               navigation.navigate("Home", { screen: "Status" });
+              sendText(
+                recipientTel,
+                recipientName,
+                userProfile.firstName + " " + userProfile.lastName,
+                time,
+                dest.address,
+                code
+              );
             } else {
               cleanupHandoff1Drivers(userProfile);
             }
@@ -366,9 +415,21 @@ export const waitForDrivers = (userProfile, orig, dest, timer, navigation) => {
             // Cleanup handoff2 drivers
             if (acceptedDriverHandoff1) {
               clearTimeout(timer);
-              await acceptHandoff(orig, dest, userProfile);
+              const { time, code } = await acceptHandoff(
+                orig,
+                dest,
+                userProfile
+              );
               cleanupAllDrivers(userProfile);
               navigation.navigate("Home", { screen: "Status" });
+              sendText(
+                recipientTel,
+                recipientName,
+                userProfile.firstName + " " + userProfile.lastName,
+                time,
+                dest.address,
+                code
+              );
             } else {
               cleanupHandoff2Drivers(userProfile);
             }
@@ -550,4 +611,33 @@ export const geoToAddress = async (location) => {
     shortAddress: response[0].name,
     postcode: response[0].postalCode,
   };
+};
+
+const sendText = (
+  recipientTel,
+  recipientName,
+  senderName,
+  time,
+  address,
+  code
+) => {
+  const msg = `Hey ${recipientName},
+  
+${senderName} has ordered an Owl Send delivery scheduled to arrive around ${time} at ${address}.
+
+Please provide the following verification code to your delivery driver upon receiving your parcel: ${code}.
+  
+Thanks for using Owl Send! :)`;
+
+  Linking.openURL(
+    `sms:${recipientTel}${Platform.OS === "ios" ? "&" : "?"}body=${msg}`
+  );
+};
+
+export const formatTime = (time) => {
+  return (
+    time.toDate().getHours().toString().padStart(2, "0") +
+    ":" +
+    time.toDate().getMinutes().toString().padStart(2, "0")
+  );
 };

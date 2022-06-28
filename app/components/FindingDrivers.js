@@ -3,6 +3,7 @@ import { Alert, Image, StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-elements";
 import Colors from "../core/Colors";
 import { cleanupAllDrivers, waitForDrivers } from "../core/SearchingAlgorithm";
+import { useRoute } from "@react-navigation/native";
 
 // Time out time for requesting drivers
 const TIME_OUT_SECONDS = 300;
@@ -16,6 +17,8 @@ const FindingDrivers = ({
   showSettings,
   setShowSettings,
 }) => {
+  const route = useRoute();
+
   useEffect(() => {
     setShowSettings(false);
 
@@ -27,7 +30,15 @@ const FindingDrivers = ({
         Alert.alert("Sorry, unable to find drivers to fulfill your order.");
       }, TIME_OUT_SECONDS * 1000);
 
-      waitForDrivers(userProfile, orig, dest, timer, navigation);
+      waitForDrivers(
+        userProfile,
+        orig,
+        dest,
+        timer,
+        navigation,
+        route.params.recipientName,
+        route.params.recipientTel
+      );
     }
   }, []);
 
